@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Task Z</title>
+<script>(function(){try{var t=localStorage.getItem("tf_theme");if(t!=="light"&&t!=="dark")t=(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%235b2fd6'/%3E%3Cpath d='M50 18 82 78H62L50 54 38 78H18z' fill='white'/%3E%3C/svg%3E" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --page:#e6e6e9; --shell:#fff; --side:#f5f5f7; --card:#fff; --line:#ebebf0; --line2:#dcdce4;
+  --text:#14141c; --muted:#8b8b9a; --dim:#b4b4c0;
+  --accent:#5b2fd6; --accent-h:#6d44e4; --accent-soft:#efe9ff; --bar:#d9cffb; --bar-top:#a68df5; --mid:#b39cf7;
+  --green:#178a5b; --green-bg:#e4f5ec; --yellow:#a87400; --yellow-bg:#fcf1d3; --red:#d23f57; --red-bg:#fde5e9; --blue:#2f6fd6; --blue-bg:#e5eefc;
+  --toast-bg:#14141c; --toast-fg:#fff;
+  --r:14px; --r-sm:9px;
+}
+/* Dark theme — applied when <html data-theme="dark">, set by the toggle in
+   the sidebar and remembered in localStorage. Falls back to the system
+   preference automatically when the person hasn't chosen explicitly. */
+html[data-theme="dark"]{
+  --page:#0e0f14; --shell:#1a1b22; --side:#16171d; --card:#1e1f27; --line:#2b2c35; --line2:#363741;
+  --text:#edeef2; --muted:#8c8d9a; --dim:#5c5d6a;
+  --accent:#8b6fff; --accent-h:#9d84ff; --accent-soft:#2a2340; --bar:#352f52; --bar-top:#6d57b8; --mid:#7a66c4;
+  --green:#3ddc84; --green-bg:#133826; --yellow:#f5b84a; --yellow-bg:#3a2d10; --red:#ff7085; --red-bg:#3a1620; --blue:#6fa3ff; --blue-bg:#152a44;
+  --toast-bg:#edeef2; --toast-fg:#14141c;
+}
+@media (prefers-color-scheme: dark){
+  html:not([data-theme="light"]):not([data-theme="dark"]){
+    --page:#0e0f14; --shell:#1a1b22; --side:#16171d; --card:#1e1f27; --line:#2b2c35; --line2:#363741;
+    --text:#edeef2; --muted:#8c8d9a; --dim:#5c5d6a;
+    --accent:#8b6fff; --accent-h:#9d84ff; --accent-soft:#2a2340; --bar:#352f52; --bar-top:#6d57b8; --mid:#7a66c4;
+    --green:#3ddc84; --green-bg:#133826; --yellow:#f5b84a; --yellow-bg:#3a2d10; --red:#ff7085; --red-bg:#3a1620; --blue:#6fa3ff; --blue-bg:#152a44;
+    --toast-bg:#edeef2; --toast-fg:#14141c;
+  }
+}
+html{transition:background-color .2s ease}
+body{transition:background-color .2s ease,color .2s ease}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--page);color:var(--text);font-size:14px;line-height:1.5;min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hidden{display:none!important}
+.ic{display:inline-flex;flex-shrink:0}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+
+/* ── buttons & fields ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:38px;padding:0 16px;border-radius:var(--r-sm);border:1px solid transparent;font-weight:600;font-size:13px;white-space:nowrap;transition:background .15s,border-color .15s}
+.btn:disabled{opacity:.6;cursor:default}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover:not(:disabled){background:var(--accent-h)}
+.btn-ghost{background:var(--shell);border-color:var(--line2);color:var(--text)}
+.btn-ghost:hover{border-color:var(--muted)}
+.btn-danger{background:var(--red-bg);color:var(--red)}
+.btn-danger:hover{background:var(--red);color:#fff}
+.btn-sm{height:32px;padding:0 12px;font-size:12px}
+.btn-block{width:100%}
+.icon-btn{width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;border:1px solid transparent;background:none;color:var(--muted)}
+.icon-btn:hover{background:var(--side);color:var(--text)}
+.icon-btn.danger:hover{background:var(--red-bg);color:var(--red)}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-size:12px;font-weight:600;color:var(--muted)}
+.field input,.field select,.field textarea,.select,.input{width:100%;height:40px;padding:0 12px;background:var(--shell);border:1px solid var(--line2);border-radius:var(--r-sm);font-size:13.5px}
+.field textarea{height:auto;min-height:84px;padding:10px 12px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus,.select:focus,.input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.field input:disabled{background:var(--side);color:var(--muted)}
+.field-error{color:var(--red);font-size:12px}
+.hint{color:var(--muted);font-size:12px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.select{width:auto;padding-right:8px;font-size:12.5px;height:34px}
+.alert{background:var(--red-bg);color:var(--red);border-radius:var(--r-sm);padding:10px 12px;font-size:13px;margin-bottom:14px}
+.pw{position:relative}
+.pw input{padding-right:56px}
+.pw button{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);font-size:12px;font-weight:600;padding:6px}
+
+/* ── chips & avatars ── */
+.chip{display:inline-block;font-size:12px;font-weight:500;padding:3px 10px;border-radius:6px;white-space:nowrap}
+.chip.complete,.chip.low,.chip.active{background:var(--green-bg);color:var(--green)}
+.chip.progress,.chip.medium{background:var(--yellow-bg);color:var(--yellow)}
+.chip.pending,.chip.high,.chip.disabled{background:var(--red-bg);color:var(--red)}
+.chip.todo{background:var(--blue-bg);color:var(--blue)}
+.chip.admin{background:var(--accent-soft);color:var(--accent)}
+.chip.plain,.chip.cat{background:var(--side);color:var(--muted)}
+
+.avatar{width:36px;height:36px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#fff;flex-shrink:0}
+.avatar.sm{width:28px;height:28px;font-size:11px}
+
+/* ── auth ── */
+.auth{position:relative;min-height:100vh;display:flex;background:var(--shell)}
+.auth-brand{width:45%;min-width:360px;background:var(--accent);position:relative;overflow:hidden;padding:48px;display:flex;flex-direction:column;justify-content:space-between;color:#fff}
+.auth-brand::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.16) 1.5px,transparent 1.5px);background-size:26px 26px}
+.auth-brand>*{position:relative}
+.logo{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:600;letter-spacing:-.2px}
+.logo svg{flex-shrink:0}
+.auth-brand h1{font-size:36px;line-height:1.15;font-weight:700;letter-spacing:-.8px;margin-bottom:14px;max-width:380px}
+.auth-brand p{opacity:.85;max-width:360px}
+.auth-points{margin-top:26px;display:flex;flex-direction:column;gap:12px;font-size:13.5px;font-weight:500}
+.auth-points span{display:flex;align-items:center;gap:10px}
+.auth-points i{width:22px;height:22px;border-radius:6px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center}
+.auth-foot{font-size:12px;opacity:.65}
+.auth-main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px}
+.auth-box{width:100%;max-width:360px}
+.tabs{display:flex;background:var(--side);border-radius:var(--r-sm);padding:4px;margin-bottom:26px}
+.tabs button{flex:1;height:34px;border:none;background:none;border-radius:6px;font-weight:600;font-size:13px;color:var(--muted)}
+.tabs button.on{background:var(--shell);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.auth-box h2{font-size:22px;font-weight:700;letter-spacing:-.3px;margin-bottom:4px}
+.auth-box .sub{color:var(--muted);margin-bottom:22px}
+.auth-note{background:var(--accent-soft);color:var(--accent);border-radius:var(--r-sm);padding:10px 12px;font-size:12.5px;margin-bottom:16px}
+.linkbtn{background:none;border:none;color:var(--accent);font-weight:600;font-size:13px}
+
+/* ── shell ── */
+.frame{padding:24px}
+.shell{background:var(--shell);border-radius:26px;display:flex;min-height:calc(100vh - 48px);padding:16px;gap:16px;max-width:1600px;margin:0 auto}
+.side{width:264px;flex-shrink:0;background:var(--side);border:1px solid var(--line);border-radius:20px;padding:16px;display:flex;flex-direction:column;position:sticky;top:40px;height:calc(100vh - 80px);overflow-y:auto}
+.side .logo{padding:6px 4px 0;color:var(--text)}
+.ws{display:flex;align-items:center;gap:10px;background:var(--shell);border:1px solid var(--line);border-radius:12px;padding:10px;margin:26px 0 24px}
+.ws-mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#c6e86a,#3fc38a);display:flex;align-items:center;justify-content:center;color:#0d3b2a;font-weight:700;flex-shrink:0}
+.ws b{font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-label{font-size:11.5px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin:0 6px 8px}
+.nav{display:flex;flex-direction:column;gap:2px;margin-bottom:22px}
+.nav button{display:flex;align-items:center;gap:12px;height:40px;padding:0 10px;border:none;background:none;border-radius:9px;color:var(--muted);font-weight:500;font-size:14px;text-align:left}
+.nav button:hover{color:var(--text)}
+.nav button.on{background:var(--shell);color:var(--accent);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.side-spacer{flex:1}
+.side-actions{background:var(--shell);border:1px solid var(--line);border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.side-actions .btn-primary{height:44px;justify-content:flex-start;padding:0 14px;font-size:14px;font-weight:500}
+.side-actions .plain{display:flex;align-items:center;gap:10px;height:40px;padding:0 14px;border:none;background:none;color:var(--muted);font-size:14px;border-radius:9px}
+.side-actions .plain:hover{color:var(--text)}
+.logout{display:flex;align-items:center;gap:10px;height:44px;padding:0 14px;border:none;border-radius:12px;background:var(--red-bg);color:var(--red);font-size:14px;font-weight:500}
+.backdrop{display:none;position:fixed;inset:0;background:rgba(15,12,30,.4);z-index:90}
+.backdrop.on{display:block}
+
+.main{flex:1;min-width:0;padding:6px 8px 8px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px}
+.top h1{font-size:26px;font-weight:600;letter-spacing:-.5px;line-height:1.2}
+.top p{color:var(--muted);font-size:14px}
+.top-l{display:flex;align-items:center;gap:12px;min-width:0}
+.menu-btn{display:none}
+.top-r{display:flex;align-items:center;gap:12px}
+.gsearch{position:relative;width:300px}
+.gsearch input{width:100%;height:40px;padding:0 60px 0 38px;border:1px solid var(--line);background:var(--side);border-radius:10px;font-size:13.5px}
+.gsearch input:focus{outline:none;border-color:var(--accent);background:var(--shell)}
+.gsearch .lead{position:absolute;left:12px;top:11px;color:var(--muted)}
+.kbd{position:absolute;right:8px;top:8px;display:flex;gap:3px}
+.kbd span{font-size:11px;background:var(--shell);border:1px solid var(--line);border-radius:5px;padding:1px 6px;color:var(--muted)}
+.pop{position:absolute;right:0;top:calc(100% + 8px);background:var(--shell);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 40px rgba(20,20,40,.14);z-index:60;min-width:280px;max-height:380px;overflow:auto}
+.gsearch .pop{left:0;right:auto;width:100%;min-width:320px}
+.pop-h{padding:10px 14px 4px;font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.pop-i{display:flex;align-items:center;gap:10px;padding:9px 14px;width:100%;background:none;border:none;text-align:left;font-size:13px}
+.pop-i:hover{background:var(--side)}
+.pop-i small{display:block;color:var(--muted);font-size:11.5px}
+.pop-empty{padding:16px;color:var(--muted);font-size:13px;text-align:center}
+.rel{position:relative}
+.bell{width:40px;height:40px;border:1px solid var(--line);border-radius:10px;background:var(--side);display:flex;align-items:center;justify-content:center;position:relative}
+.bell b{position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;border-radius:10px;font-size:10px;min-width:17px;height:17px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.me{background:none;border:none;padding:0;border-radius:50%}
+.sep{width:1px;height:32px;background:var(--line)}
+.page{display:none}
+.page.on{display:block}
+
+/* ── cards & dashboard elements ── */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.card-h{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.card-h h3{font-size:20px;font-weight:500;letter-spacing:-.3px}
+.card-h.sm h3{font-size:16px}
+.dash{display:grid;grid-template-columns:1fr 1fr 1.7fr;gap:16px;align-items:stretch}
+.stat{display:flex;flex-direction:column;justify-content:space-between;min-height:186px}
+.stat .lbl{color:var(--muted);font-size:14px}
+.stat .num{font-size:46px;font-weight:400;letter-spacing:-1.5px;line-height:1;margin:22px 0 14px}
+.delta{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}
+.delta i{font-style:normal;display:inline-flex;align-items:center;gap:2px;font-size:11.5px;font-weight:500;padding:1px 6px;border-radius:5px;background:var(--green-bg);color:var(--green)}
+.delta i.neg{background:var(--red-bg);color:var(--red)}
+.d-chart{grid-column:3;grid-row:1/span 2;display:flex;flex-direction:column}
+.d-team{grid-column:span 2}
+.d-table{grid-column:1/-1}
+.bars{display:flex;align-items:flex-end;gap:5px;padding-top:28px;margin-top:auto}
+.bar-col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:8px;min-width:0}
+.bar-wrap{height:250px;width:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;position:relative}
+.bar{width:100%;background:var(--bar);border-top:2px solid var(--bar-top);border-radius:2px 2px 0 0;min-height:3px;transition:height .4s}
+.bar-col.top .bar{background:#cbbcf9}
+.bar-col small{font-size:10.5px;color:var(--text)}
+.top-pill{position:absolute;top:-24px;font-size:10px;background:var(--green-bg);color:var(--green);border-radius:4px;padding:1px 6px}
+.member{display:flex;align-items:center;gap:12px;padding:9px 0}
+.member .who{flex:1;min-width:0}
+.member .who b{display:block;font-weight:500;font-size:15px}
+.member .who small{color:var(--muted);font-size:11.5px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.donut{display:flex;justify-content:center;padding:6px 0 14px;position:relative}
+.donut-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.donut-c b{font-size:38px;font-weight:600;letter-spacing:-1px;line-height:1}
+.donut-c span{color:var(--muted);font-size:13px;margin-top:6px}
+.legend{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.legend span{display:flex;align-items:center;gap:8px;font-size:13px}
+.legend i{width:22px;height:22px;border-radius:50%;display:inline-block}
+
+/* ── tables ── */
+.tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.sbox{position:relative}
+.sbox .lead{position:absolute;left:10px;top:9px;color:var(--muted)}
+.sbox input{height:34px;width:210px;padding:0 10px 0 32px;border:1px solid var(--line);background:var(--side);border-radius:8px;font-size:12.5px}
+.sbox input:focus{outline:none;border-color:var(--accent);background:var(--shell)}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;min-width:640px}
+th{font-size:12px;font-weight:500;color:var(--muted);text-align:left;padding:12px 16px;background:var(--side);white-space:nowrap}
+td{padding:13px 16px;border-top:1px solid var(--line);font-size:13.5px;vertical-align:middle}
+tbody tr:hover td{background:#fafafc}
+.u-cell{display:flex;align-items:center;gap:10px}
+.u-cell span:not(.avatar){white-space:nowrap}
+.u-cell small{display:block;color:var(--muted);font-size:11.5px}
+.mono{font-variant-numeric:tabular-nums;color:var(--muted)}
+.acts{display:flex;gap:2px}
+.empty{text-align:center;color:var(--muted);padding:44px 16px}
+.empty b{display:block;color:var(--text);font-size:15px;margin-bottom:4px}
+
+/* ── tasks page ── */
+.pills{display:flex;gap:6px;flex-wrap:wrap}
+.pill{height:34px;padding:0 14px;border:1px solid var(--line);background:var(--shell);border-radius:20px;font-size:13px;font-weight:500;color:var(--muted)}
+.pill.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.bar-tools{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{width:36px;height:34px;border:none;background:var(--shell);color:var(--muted);display:flex;align-items:center;justify-content:center}
+.seg button.on{background:var(--accent-soft);color:var(--accent)}
+.tasklist{display:flex;flex-direction:column;gap:10px}
+.task{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--line2);border-radius:12px;padding:14px 16px}
+.task[data-p=high]{border-left-color:var(--red)}
+.task[data-p=medium]{border-left-color:#e2a72e}
+.task[data-p=low]{border-left-color:#3fb984}
+.task:hover{border-color:var(--line2);box-shadow:0 4px 16px rgba(20,20,40,.05)}
+.task.done .t-title{text-decoration:line-through;color:var(--muted)}
+.check{width:22px;height:22px;border-radius:50%;border:2px solid var(--line2);background:var(--shell);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.check:hover{border-color:var(--green)}
+.task.done .check{background:var(--green);border-color:var(--green)}
+.t-body{flex:1;min-width:0}
+.t-title{font-weight:600;font-size:14.5px;word-break:break-word}
+.t-desc{color:var(--muted);font-size:13px;margin-top:2px;word-break:break-word}
+.t-meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.due{white-space:nowrap;font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:4px}
+.due.over{color:var(--red);font-weight:600}
+.kanban{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.col{background:var(--side);border-radius:14px;padding:12px;min-height:200px}
+.col.over{outline:2px dashed var(--accent);outline-offset:-4px}
+.col-h{display:flex;justify-content:space-between;align-items:center;padding:4px 6px 12px;font-weight:600}
+.col-h span{font-size:12px;background:var(--shell);border-radius:10px;padding:1px 9px;color:var(--muted)}
+.kcard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:8px;cursor:grab}
+.kcard:active{cursor:grabbing}
+.kcard.dragging{opacity:.4}
+.kcard .t-title{font-size:13.5px}
+
+/* ── calendar ── */
+.cal-h{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.cal-h h3{font-size:18px;font-weight:600;flex:1}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.cal-dow{background:var(--side);padding:10px;font-size:12px;color:var(--muted);font-weight:500;text-align:center}
+.cal-day{min-height:104px;border-top:1px solid var(--line);border-left:1px solid var(--line);padding:6px;cursor:pointer;display:flex;flex-direction:column;gap:3px;background:var(--card)}
+.cal-day:nth-child(7n+8){border-left:none}
+.cal-day:hover{background:#fafafc}
+.cal-day.out{background:#fbfbfc;color:var(--dim)}
+.cal-day .n{font-size:12.5px;font-weight:500;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:50%}
+.cal-day.today .n{background:var(--accent);color:#fff}
+.ev{font-size:11.5px;padding:2px 6px;border-radius:5px;background:var(--accent-soft);color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border:none;text-align:left;width:100%}
+.ev.done{background:var(--green-bg);color:var(--green);text-decoration:line-through}
+.ev.high{background:var(--red-bg);color:var(--red)}
+.more{font-size:11px;color:var(--muted);padding-left:4px}
+
+/* ── analytics ── */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px}
+.kpi .lbl{color:var(--muted);font-size:13px}
+.kpi .num{font-size:32px;font-weight:500;letter-spacing:-1px;margin-top:4px}
+.grid2{display:grid;grid-template-columns:1.5fr 1fr;gap:16px;margin-bottom:16px}
+.grid2.eq{grid-template-columns:1fr 1fr}
+.hbar{margin-bottom:14px}
+.hbar-h{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}
+.hbar-t{height:9px;border-radius:5px;background:var(--side);overflow:hidden}
+.hbar-t i{display:block;height:100%;border-radius:5px;background:var(--accent)}
+.pair{display:flex;gap:2px;height:100%;align-items:flex-end;width:100%}
+.pair i{flex:1;border-radius:3px 3px 0 0;min-height:2px}
+.key{display:flex;gap:16px;font-size:12.5px;color:var(--muted)}
+.key span{display:flex;align-items:center;gap:6px}
+.key i{width:10px;height:10px;border-radius:3px;display:inline-block}
+
+/* ── settings ── */
+.set-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.toggle{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:6px 0 14px}
+.toggle b{display:block;font-weight:600;font-size:14px}
+.sw{width:42px;height:24px;border-radius:14px;border:none;background:var(--line2);position:relative;flex-shrink:0;transition:background .15s}
+.sw::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .15s}
+.sw.on{background:var(--accent)}
+.sw.on::after{transform:translateX(18px)}
+
+/* ── modal / toast ── */
+.overlay{position:fixed;inset:0;background:rgba(15,12,30,.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:var(--shell);border-radius:18px;width:100%;max-width:500px;max-height:calc(100vh - 40px);display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(20,20,40,.3);animation:up .18s ease}
+@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.modal-h{display:flex;justify-content:space-between;align-items:center;padding:20px 22px 6px}
+.modal-h h2{font-size:18px;font-weight:600}
+.modal-b{padding:14px 22px;overflow:auto}
+.modal-f{padding:14px 22px 20px;display:flex;justify-content:flex-end;gap:10px}
+.toasts{position:fixed;bottom:22px;right:22px;display:flex;flex-direction:column;gap:8px;z-index:400}
+.toast{background:var(--toast-bg);color:var(--toast-fg);padding:11px 16px;border-radius:10px;font-size:13px;box-shadow:0 10px 30px rgba(0,0,0,.25);max-width:320px;animation:up .18s ease}
+.toast.error{background:var(--red)}
+.loading{padding:50px;text-align:center;color:var(--muted)}
+.spin{width:22px;height:22px;border:2px solid var(--line2);border-top-color:var(--accent);border-radius:50%;animation:sp .7s linear infinite;margin:0 auto 10px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.kb{display:grid;grid-template-columns:auto 1fr;gap:10px 16px;font-size:13.5px;align-items:center}
+.kb kbd{background:var(--side);border:1px solid var(--line);border-radius:6px;padding:2px 8px;font-size:12px;font-family:inherit}
+
+/* ── responsive ── */
+@media (max-width:1180px){
+  .dash{grid-template-columns:1fr 1fr}
+  .d-chart{grid-column:1/-1;grid-row:auto}
+  .d-team,.d-prog{grid-column:1/-1}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .grid2,.set-grid{grid-template-columns:1fr}
+}
+@media (max-width:860px){
+  .frame{padding:0}
+  .shell{border-radius:0;padding:0;min-height:100vh;display:block}
+  .side{position:fixed;left:0;top:0;height:100vh;z-index:100;border-radius:0 20px 20px 0;transform:translateX(-105%);transition:transform .2s}
+  .side.open{transform:none}
+  .main{padding:16px}
+  .menu-btn{display:inline-flex}
+  .gsearch{display:none}
+  .auth{flex-direction:column}
+  .auth-brand{width:100%;min-width:0;padding:28px}
+  .auth-brand h1{font-size:26px}
+  .auth-points{display:none}
+  .kanban{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .top h1{font-size:21px}
+  .top p{display:none}
+  .sep{display:none}
+  .stat{min-height:150px}.stat .num{font-size:36px;margin:14px 0 10px}
+  .row2{grid-template-columns:1fr}
+  .cal-day{min-height:70px}
+  .ev{font-size:10px}
+}
+.side .logo svg{color:var(--accent)}
+.scope-row{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin:-6px 0 14px}
+@media (max-width:560px){.bar-wrap{height:190px}.delta{font-size:12px;flex-wrap:wrap}}
+</style>
+</head>
+<body>
+
+<!-- ═════ AUTH ═════ -->
+<div class="auth hidden" id="auth">
+  <div class="auth-brand">
+    <div class="logo"><i data-logo></i>Task Z</div>
+    <div>
+      <h1 id="brand-h">Monitor all of your projects and tasks here.</h1>
+      <p id="brand-p">One clear dashboard for your work, your team, and everything due next.</p>
+      <div class="auth-points">
+        <span><i data-i="check" data-s="13"></i>Dashboard, list, kanban and calendar views</span>
+        <span><i data-i="check" data-s="13"></i>Team workload and progress at a glance</span>
+        <span><i data-i="check" data-s="13"></i>Admin controls for members and access</span>
+      </div>
+    </div>
+    <div class="auth-foot">© <span id="yr"></span> Task Z</div>
+  </div>
+  <div class="auth-main">
+    <button class="icon-btn" id="btn-theme-auth" data-act="toggle-theme" aria-label="Toggle dark mode" title="Toggle dark mode" style="position:absolute;top:16px;right:16px"><i class="ic" data-i="moon"></i></button>
+    <div class="auth-box">
+      <div class="tabs" id="auth-tabs">
+        <button class="on" id="tab-login" type="button">Sign in</button>
+        <button id="tab-signup" type="button">Create account</button>
+      </div>
+      <div id="auth-note"></div>
+
+      <form id="form-login" novalidate>
+        <h2>Welcome back</h2><p class="sub">Sign in to continue to your workspace.</p>
+        <div id="login-alert"></div>
+        <div class="field"><label for="l-email">Email</label><input id="l-email" type="email" autocomplete="username" placeholder="you@company.com"><div class="field-error" id="e-l-email"></div></div>
+        <div class="field"><label for="l-pass">Password</label><div class="pw"><input id="l-pass" type="password" autocomplete="current-password" placeholder="Your password"><button type="button" data-pw="l-pass">Show</button></div><div class="field-error" id="e-l-pass"></div></div>
+        <button class="btn btn-primary btn-block" id="btn-login" type="submit">Sign in</button>
+      </form>
+
+      <form id="form-signup" class="hidden" novalidate>
+        <h2 id="su-title">Create your account</h2><p class="sub" id="su-sub">Start organizing your work in minutes.</p>
+        <div id="signup-alert"></div>
+        <div class="field"><label for="s-name">Full name</label><input id="s-name" type="text" autocomplete="name" placeholder="Jordan Lee"><div class="field-error" id="e-s-name"></div></div>
+        <div class="field"><label for="s-email">Email</label><input id="s-email" type="email" autocomplete="username" placeholder="you@company.com"><div class="field-error" id="e-s-email"></div></div>
+        <div class="field"><label for="s-pass">Password</label><div class="pw"><input id="s-pass" type="password" autocomplete="new-password" placeholder="At least 8 characters"><button type="button" data-pw="s-pass">Show</button></div><div class="field-error" id="e-s-pass"></div></div>
+        <div class="field"><label for="s-conf">Confirm password</label><input id="s-conf" type="password" autocomplete="new-password" placeholder="Repeat password"><div class="field-error" id="e-s-conf"></div></div>
+        <button class="btn btn-primary btn-block" id="btn-signup" type="submit">Create account</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ═════ APP ═════ -->
+<div class="frame hidden" id="frame">
+  <div class="shell">
+    <aside class="side" id="side">
+      <div class="logo"><i data-logo></i>Task Z</div>
+      <div class="ws"><div class="ws-mark" id="ws-mark">W</div><b id="ws-name">Workspace</b><span id="ws-admin-badge" class="chip admin hidden" style="margin-left:auto;font-size:10px">Admin · Full access</span></div>
+
+      <div class="nav-label">Main menu</div>
+      <nav class="nav" id="nav-main">
+        <button data-page="dashboard"><i class="ic" data-i="grid"></i>Dashboard</button>
+        <button data-page="tasks"><i class="ic" data-i="tasks"></i>Tasks</button>
+        <button data-page="calendar"><i class="ic" data-i="calendar"></i>Calendar</button>
+        <button data-page="analytics"><i class="ic" data-i="chart"></i>Analytics</button>
+        <button data-page="team"><i class="ic" data-i="users"></i>Team</button>
+      </nav>
+      <div class="nav-label admin-only hidden">Admin</div>
+      <nav class="nav admin-only hidden">
+        <button data-page="admin"><i class="ic" data-i="shield"></i>Admin Panel<b id="admin-pending-badge" class="hidden" style="margin-left:auto;background:var(--red);color:#fff;border-radius:10px;font-size:10px;min-width:17px;height:17px;display:flex;align-items:center;justify-content:center;padding:0 4px">0</b></button>
+      </nav>
+      <div class="nav-label">General</div>
+      <nav class="nav">
+        <button data-page="settings"><i class="ic" data-i="settings"></i>Settings</button>
+        <button data-act="help"><i class="ic" data-i="help"></i>Help</button>
+      </nav>
+
+      <div class="side-spacer"></div>
+      <div class="side-actions">
+        <button class="btn btn-primary" data-act="new-task"><i class="ic" data-i="plus"></i>Add Task</button>
+        <button class="plain admin-only hidden" data-act="new-user"><i class="ic" data-i="userplus"></i>Add Member</button>
+      </div>
+      <button class="logout" id="btn-logout"><i class="ic" data-i="logout"></i>Log Out</button>
+    </aside>
+
+    <main class="main">
+      <div class="top">
+        <div class="top-l">
+          <button class="icon-btn menu-btn" id="btn-menu" aria-label="Open menu"><i class="ic" data-i="menu"></i></button>
+          <div><h1 id="pg-title">Dashboard</h1><p id="pg-sub"></p></div>
+        </div>
+        <div class="top-r">
+          <div class="gsearch rel" id="gsearch">
+            <span class="lead ic" data-i="search" data-s="16"></span>
+            <input id="g-input" type="text" placeholder="Search anything" autocomplete="off" aria-label="Search tasks and members">
+            <div class="kbd"><span>Ctrl</span><span>K</span></div>
+            <div class="pop hidden" id="g-pop"></div>
+          </div>
+          <button class="bell" id="btn-theme" data-act="toggle-theme" aria-label="Toggle dark mode" title="Toggle dark mode"><i class="ic" data-i="moon"></i></button>
+          <div class="rel">
+            <button class="bell" id="btn-bell" aria-label="Notifications"><i class="ic" data-i="bell"></i><b id="bell-n" class="hidden">0</b></button>
+            <div class="pop hidden" id="bell-pop"></div>
+          </div>
+          <div class="sep"></div>
+          <div class="rel">
+            <button class="me" id="btn-me" aria-label="Account menu"><span class="avatar" id="me-av">?</span></button>
+            <div class="pop hidden" id="me-pop"></div>
+          </div>
+        </div>
+      </div>
+
+      <section class="page" id="pg-dashboard"></section>
+      <section class="page" id="pg-tasks"></section>
+      <section class="page" id="pg-calendar"></section>
+      <section class="page" id="pg-analytics"></section>
+      <section class="page" id="pg-team"></section>
+      <section class="page" id="pg-admin"></section>
+      <section class="page" id="pg-settings"></section>
+    </main>
+  </div>
+</div>
+
+<div class="backdrop" id="backdrop"></div>
+<div class="overlay hidden" id="overlay"><div class="modal" id="modal" role="dialog" aria-modal="true"></div></div>
+<div class="toasts" id="toasts"></div>
+<script src="config.js"></script>
+<script>
+(function () {
+'use strict';
+
+// Strip any trailing slash(es) before appending '/api' — a base URL pasted
+// as 'https://host.com/' instead of 'https://host.com' would otherwise
+// produce a double slash ('.../api' → '..//api'), which most servers,
+// including this one's Express router, treat as a 404 rather than
+// normalizing it away.
+const API = ((window.APP_CONFIG && window.APP_CONFIG.API_BASE_URL ? window.APP_CONFIG.API_BASE_URL : window.location.origin).replace(/\/+$/, '')) + '/api';
+const $ = (id) => document.getElementById(id);
+
+/* ───────── theme (light/dark) ───────── */
+// An explicit choice (stored here) always wins; with no stored choice, the
+// OS/browser preference is used automatically via the CSS media query above.
+function currentTheme() {
+  try {
+    const saved = localStorage.getItem('tf_theme');
+    if (saved === 'light' || saved === 'dark') return saved;
+  } catch (e) {}
+  return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+}
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  ['btn-theme', 'btn-theme-auth'].forEach((id) => {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    const i = btn.querySelector('.ic');
+    if (i) { i.setAttribute('data-i', theme === 'dark' ? 'sun' : 'moon'); if (typeof mountIcons === 'function') mountIcons(btn); }
+  });
+}
+function toggleTheme() {
+  const next = currentTheme() === 'dark' ? 'light' : 'dark';
+  try { localStorage.setItem('tf_theme', next); } catch (e) {}
+  applyTheme(next);
+}
+// Follow the OS preference live, but only while the person hasn't made an
+// explicit choice of their own.
+if (window.matchMedia) {
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    let hasChoice = false;
+    try { hasChoice = !!localStorage.getItem('tf_theme'); } catch (err) {}
+    if (!hasChoice) applyTheme(e.matches ? 'dark' : 'light');
+  });
+}
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const STATUS_LABEL = { 'todo': 'To Do', 'in-progress': 'In Progress', 'done': 'Done' };
+
+const S = {
+  token: null, user: null, config: null, page: 'dashboard', scope: 'me',
+  tasks: [], team: [], dash: null, settings: null, pending: [],
+  chartKey: 'created', view: 'list',
+  tf: { status: 'all', priority: '', search: '', sort: 'newest' },
+  dt: { search: '', priority: '', sort: 'newest' },
+  tm: { search: '', role: '', sort: 'name' },
+  cal: new Date()
+};
+
+/* ───────── utils ───────── */
+function esc(v) {
+  return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+const P = {
+  grid: '<rect x="3" y="3" width="7" height="7" rx="1.6"/><rect x="14" y="3" width="7" height="7" rx="1.6"/><rect x="3" y="14" width="7" height="7" rx="1.6"/><rect x="14" y="14" width="7" height="7" rx="1.6"/>',
+  tasks: '<path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/>',
+  calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+  chart: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 17v-5M12 17V8M16 17v-3"/>',
+  users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.3c2.2.7 3.5 2.6 3.5 5.7"/>',
+  settings: '<path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>',
+  help: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 1-1 1.7M12 17h.01"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  userplus: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6 1.6 0 3 .4 4 1.2M19 8v6M16 11h6"/>',
+  logout: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',
+  bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
+  download: '<path d="M12 3v12M7 10l5 5 5-5M4 21h16"/>',
+  filter: '<path d="M3 5h18l-7 8v6l-4-2v-4z"/>',
+  edit: '<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+  trash: '<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>',
+  key: '<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3"/>',
+  ban: '<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/>',
+  check: '<path d="M5 12l5 5 9-10"/>',
+  x: '<path d="M6 6l12 12M18 6L6 18"/>',
+  menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
+  list: '<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
+  kanban: '<rect x="3" y="3" width="5" height="18" rx="1.5"/><rect x="10" y="3" width="5" height="12" rx="1.5"/><rect x="17" y="3" width="4" height="8" rx="1.5"/>',
+  left: '<path d="M15 6l-6 6 6 6"/>',
+  right: '<path d="M9 6l6 6-6 6"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  copy: '<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/>',
+  sort: '<path d="M7 4v16M3 16l4 4 4-4M17 20V4M13 8l4-4 4 4"/>',
+  shield: '<path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/>',
+  sun: '<circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8L6 18M18 6l1.8-1.8"/>',
+  moon: '<path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11z"/>'
+};
+function ic(name, size) {
+  return '<svg width="' + (size || 18) + '" height="' + (size || 18) + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + (P[name] || '') + '</svg>';
+}
+const LOGO = '<svg width="34" height="34" viewBox="0 0 34 34" fill="currentColor"><path d="M17 2l15 28H22l-5-10-5 10H2z"/><path d="M17 2l6.2 11.6L17 19.8l-6.2-6.2z" opacity=".5"/></svg>';
+function mountIcons(root) {
+  (root || document).querySelectorAll('[data-i]').forEach((el) => { el.innerHTML = ic(el.getAttribute('data-i'), +el.getAttribute('data-s') || 18); });
+  (root || document).querySelectorAll('[data-logo]').forEach((el) => { el.outerHTML = LOGO; });
+}
+function toast(msg, type) {
+  const el = document.createElement('div');
+  el.className = 'toast' + (type === 'error' ? ' error' : '');
+  el.textContent = msg;
+  $('toasts').appendChild(el);
+  setTimeout(() => el.remove(), 3200);
+}
+
+const COLORS = ['#5b2fd6', '#e0782f', '#1f9d78', '#c2417b', '#2f6fd6', '#a87400', '#7a4bd8', '#0f8aa3'];
+function initials(name) {
+  const p = String(name || '?').trim().split(/\s+/);
+  return ((p[0] || '?')[0] + (p.length > 1 ? p[p.length - 1][0] : '')).toUpperCase();
+}
+function avatar(u, small) {
+  const name = typeof u === 'string' ? u : (u && u.name) || '';
+  const img = typeof u === 'object' && u && u.avatar;
+  if (img) {
+    return '<span class="avatar' + (small ? ' sm' : '') + '" style="padding:0;overflow:hidden"><img src="' + img + '" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:inherit"></span>';
+  }
+  let h = 0; const s = String(name || '');
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+  return '<span class="avatar' + (small ? ' sm' : '') + '" style="background:' + COLORS[h % COLORS.length] + '">' + esc(initials(name)) + '</span>';
+}
+function pad(n) { return n < 10 ? '0' + n : '' + n; }
+function keyOf(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+const todayKey = () => keyOf(new Date());
+const dueKey = (t) => (t.dueDate ? String(t.dueDate).slice(0, 10) : '');
+function fmtDay(k) { return new Date(k + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); }
+function isOverdue(t) { const k = dueKey(t); return !!k && t.status !== 'done' && k < todayKey(); }
+const shortId = (id) => '#' + String(id).slice(0, 4).toUpperCase();
+const isAdmin = () => !!(S.user && S.user.role === 'admin');
+const loadingHtml = '<div class="loading"><div class="spin"></div>Loading…</div><p class="hint" style="text-align:center;margin-top:8px">If the server was idle, the first load can take up to a minute.</p>';
+const errorHtml = (msg) => '<div class="loading" style="flex-direction:column;gap:12px"><div>' + esc(msg) + '</div><button class="btn btn-primary btn-sm" data-act="retry-load">Retry</button></div>';
+function statusChip(s) {
+  const cls = s === 'done' ? 'complete' : s === 'in-progress' ? 'progress' : 'todo';
+  return '<span class="chip ' + cls + '">' + (STATUS_LABEL[s] || s) + '</span>';
+}
+function download(name, rows) {
+  const cell = (c) => {
+    let v = String(c == null ? '' : c);
+    if (/^[=+\-@]/.test(v)) v = "'" + v; // avoid spreadsheet formula injection
+    return '"' + v.replace(/"/g, '""') + '"';
+  };
+  const blob = new Blob(['\ufeff' + rows.map((r) => r.map(cell).join(',')).join('\n')], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 600);
+}
+function genPass() {
+  const c = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+  const a = new Uint32Array(12); crypto.getRandomValues(a);
+  return Array.from(a, (x) => c[x % c.length]).join('');
+}
+
+/* ───────── session + api ───────── */
+function saveSession(token, user) {
+  S.token = token; S.user = user;
+  try { localStorage.setItem('tf_token', token); localStorage.setItem('tf_user', JSON.stringify(user)); } catch (e) {}
+}
+function clearSession() {
+  S.token = null; S.user = null;
+  try { localStorage.removeItem('tf_token'); localStorage.removeItem('tf_user'); } catch (e) {}
+}
+function restoreSession() {
+  try {
+    const t = localStorage.getItem('tf_token'), u = localStorage.getItem('tf_user');
+    if (t && u) { S.token = t; S.user = JSON.parse(u); return true; }
+  } catch (e) {}
+  return false;
+}
+async function api(method, path, body) {
+  const headers = {};
+  if (body !== undefined) headers['Content-Type'] = 'application/json';
+  if (S.token) headers.Authorization = 'Bearer ' + S.token;
+  let res, attempts = method === 'GET' ? 3 : 1;
+  for (let n = 1; ; n++) {
+    const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 45000);
+    try {
+      res = await fetch(API + path, { method, headers, signal: ctl.signal, body: body !== undefined ? JSON.stringify(body) : undefined });
+      clearTimeout(timer); break;
+    } catch (e) {
+      clearTimeout(timer);
+      if (n >= attempts) throw new Error('Cannot reach the server. Is it running?');
+      await new Promise((r) => setTimeout(r, 1500 * n)); // server may be waking up (free hosting)
+    }
+  }
+  let json = null;
+  try { json = await res.json(); } catch (e) {}
+  if (res.status === 401 && S.token) { logout(true); throw new Error('Unauthorized'); }
+  if (!json || !json.success) throw new Error((json && json.error) || 'Request failed (' + res.status + ')');
+  return json.data;
+}
+const quiet = (e) => { if (e && e.message !== 'Unauthorized') toast(e.message, 'error'); };
+
+/* ───────── auth screen ───────── */
+function setAuthTab(tab) {
+  const login = tab === 'login';
+  $('tab-login').classList.toggle('on', login);
+  $('tab-signup').classList.toggle('on', !login);
+  $('form-login').classList.toggle('hidden', !login);
+  $('form-signup').classList.toggle('hidden', login);
+  $('login-alert').innerHTML = ''; $('signup-alert').innerHTML = '';
+}
+function fieldErr(id, msg) { $(id).textContent = msg || ''; }
+function alertBox(id, msg) { $(id).innerHTML = msg ? '<div class="alert">' + esc(msg) + '</div>' : ''; }
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+async function showAuth() {
+  $('frame').classList.add('hidden');
+  $('auth').classList.remove('hidden');
+  document.title = 'Task Z — Sign in';
+  $('form-login').reset(); $('form-signup').reset();
+  document.querySelectorAll('[data-pw]').forEach((b) => { $(b.getAttribute('data-pw')).type = 'password'; b.textContent = 'Show'; });
+  try { S.config = await api('GET', '/auth/config'); } catch (e) {
+    S.config = { firstRun: false, workspaceName: 'Workspace' };
+    if (e && e.message === 'Cannot reach the server. Is it running?') {
+      $('auth-note').innerHTML = '<div class="auth-note" style="background:var(--red-soft,#2c1620);color:var(--red,#f4677d);border-color:var(--red,#f4677d)">' +
+        'Can\'t reach the server at <code>' + esc(API) + '</code>. Make sure the backend is running (<code>node server.js</code>) and, if the frontend is hosted separately, that <code>config.js</code> points at the right address.</div>';
+      return;
+    }
+  }
+  const c = S.config;
+  // Sign-up is always available. The very first account on an empty
+  // database becomes the workspace admin automatically; every account
+  // after that is created pending and needs an admin to approve it
+  // (from the Admin Panel) before it can log in.
+  $('auth-tabs').classList.remove('hidden');
+  if (c.firstRun) {
+    $('auth-note').innerHTML = '<div class="auth-note">Welcome! The first account you create becomes the workspace admin.</div>';
+    $('su-title').textContent = 'Create the admin account';
+    $('su-sub').textContent = 'You\'ll be able to add members and manage access.';
+    setAuthTab('signup');
+  } else {
+    $('auth-note').innerHTML = '';
+    $('su-title').textContent = 'Create your account';
+    $('su-sub').textContent = 'An admin will need to approve it before you can sign in.';
+    setAuthTab('login');
+  }
+}
+
+function bindAuth() {
+  $('tab-login').addEventListener('click', () => setAuthTab('login'));
+  $('tab-signup').addEventListener('click', () => setAuthTab('signup'));
+  document.querySelectorAll('[data-pw]').forEach((b) => b.addEventListener('click', () => {
+    const inp = $(b.getAttribute('data-pw')); const show = inp.type === 'password';
+    inp.type = show ? 'text' : 'password'; b.textContent = show ? 'Hide' : 'Show';
+  }));
+
+  $('form-login').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    fieldErr('e-l-email'); fieldErr('e-l-pass'); alertBox('login-alert');
+    const email = $('l-email').value.trim(), pass = $('l-pass').value;
+    let ok = true;
+    if (!EMAIL_RE.test(email)) { fieldErr('e-l-email', 'Enter a valid email address.'); ok = false; }
+    if (!pass) { fieldErr('e-l-pass', 'Enter your password.'); ok = false; }
+    if (!ok) return;
+    const btn = $('btn-login'); btn.disabled = true; btn.textContent = 'Signing in…';
+    try {
+      const d = await api('POST', '/auth/login', { email, password: pass });
+      saveSession(d.token, d.user); toast('Welcome back, ' + d.user.name.split(' ')[0] + '.');
+      enterApp();
+    } catch (err) { alertBox('login-alert', err.message); }
+    btn.disabled = false; btn.textContent = 'Sign in';
+  });
+
+  $('form-signup').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    ['e-s-name', 'e-s-email', 'e-s-pass', 'e-s-conf'].forEach((i) => fieldErr(i)); alertBox('signup-alert');
+    const name = $('s-name').value.trim(), email = $('s-email').value.trim(), pass = $('s-pass').value, conf = $('s-conf').value;
+    let ok = true;
+    if (name.length < 2) { fieldErr('e-s-name', 'Enter your full name.'); ok = false; }
+    if (!EMAIL_RE.test(email)) { fieldErr('e-s-email', 'Enter a valid email address.'); ok = false; }
+    if (pass.length < 8) { fieldErr('e-s-pass', 'Use at least 8 characters.'); ok = false; }
+    if (conf !== pass) { fieldErr('e-s-conf', "Passwords don't match."); ok = false; }
+    if (!ok) return;
+    const btn = $('btn-signup'); btn.disabled = true; btn.textContent = 'Creating account…';
+    try {
+      const d = await api('POST', '/auth/register', { name, email, password: pass });
+      if (d.pending) {
+        $('form-signup').reset();
+        setAuthTab('login');
+        $('auth-note').innerHTML = '<div class="auth-note">' + esc(d.message) + '</div>';
+      } else {
+        saveSession(d.token, d.user); toast('Account created. Welcome to Task Z!');
+        enterApp();
+      }
+    } catch (err) { alertBox('signup-alert', err.message); }
+    btn.disabled = false; btn.textContent = 'Create account';
+  });
+}
+
+function logout(expired) {
+  clearSession();
+  S.tasks = []; S.team = []; S.dash = null; S.settings = null; S.loaded = false; S.page = 'dashboard';
+  try { localStorage.removeItem('tf_page'); localStorage.removeItem('tf_ui'); } catch (e) {}
+  try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+  closePops(); closeModal();
+  showAuth();
+  toast(expired ? 'Your session ended. Please sign in again.' : 'Signed out.', expired ? 'error' : undefined);
+}
+
+/* ───────── shell ───────── */
+const TITLES = {
+  dashboard: ['Dashboard', 'Monitor all of your tasks and team here'],
+  tasks: ['Tasks', 'Create, filter and track your work'],
+  calendar: ['Calendar', 'See what is due, and when'],
+  analytics: ['Analytics', 'How work is moving through the workspace'],
+  team: ['Team', 'Everyone in your workspace, and how their work is going'],
+  admin: ['Admin Panel', 'Manage members, roles and workspace-wide settings'],
+  settings: ['Settings', 'Your profile and password']
+};
+
+function applyChrome() {
+  const u = S.user;
+  $('me-av').outerHTML = avatar(u).replace('class="avatar"', 'class="avatar" id="me-av"');
+  document.querySelectorAll('.admin-only').forEach((el) => el.classList.toggle('hidden', !isAdmin()));
+  $('ws-admin-badge').classList.toggle('hidden', !isAdmin());
+  const wn = (S.config && S.config.workspaceName) || 'Workspace';
+  $('ws-name').textContent = wn; $('ws-mark').textContent = wn.trim()[0].toUpperCase();
+}
+
+async function enterApp() {
+  S.scope = isAdmin() ? 'all' : 'me';
+  loadUi();
+  S.dash = null;
+  applyChrome();
+  $('auth').classList.add('hidden');
+  $('frame').classList.remove('hidden');
+  document.title = 'Task Z';
+  try { S.config = await api('GET', '/auth/config'); } catch (e) {}
+  applyChrome();
+  S.loaded = false;
+  // Reopen on whichever page was last visited (survives a refresh/reload)
+  // instead of always bouncing back to Dashboard.
+  let startPage = pageFromHash();
+  if (!startPage) { try { const saved = localStorage.getItem('tf_page'); if (saved && TITLES[saved]) startPage = saved; } catch (e) {} }
+  go(startPage || S.page || 'dashboard');
+  refreshData();
+  // quietly confirm the session and pick up role changes
+  api('GET', '/auth/me').then((u) => { if (u.role !== S.user.role) { S.user = u; enterApp(); } else { S.user = u; saveSession(S.token, u); applyChrome(); } }).catch(() => {});
+}
+
+function closeSide() { $('side').classList.remove('open'); $('backdrop').classList.remove('on'); }
+
+/* ───────── refresh-proof navigation ───────── */
+function pageFromHash() {
+  const m = /^#\/?([a-z]+)/.exec(location.hash || '');
+  return m && TITLES[m[1]] ? m[1] : null;
+}
+function saveUi() {
+  try { localStorage.setItem('tf_ui', JSON.stringify({ view: S.view, scope: S.scope, chartKey: S.chartKey, tf: S.tf, dt: S.dt, tm: S.tm, cal: S.cal.toISOString() })); } catch (e) {}
+}
+function loadUi() {
+  try {
+    const u = JSON.parse(localStorage.getItem('tf_ui') || 'null'); if (!u) return;
+    if (u.view === 'list' || u.view === 'kanban') S.view = u.view;
+    if (u.chartKey) S.chartKey = u.chartKey;
+    if (u.tf) Object.assign(S.tf, u.tf);
+    if (u.dt) Object.assign(S.dt, u.dt);
+    if (u.tm) Object.assign(S.tm, u.tm);
+    if (u.cal && !isNaN(new Date(u.cal))) S.cal = new Date(u.cal);
+    if (isAdmin() && (u.scope === 'all' || u.scope === 'me')) S.scope = u.scope;
+  } catch (e) {}
+}
+window.addEventListener('hashchange', () => {
+  const p = pageFromHash();
+  if (p && S.token && p !== S.page) go(p);
+});
+window.addEventListener('beforeunload', saveUi);
+document.addEventListener('visibilitychange', () => { if (document.hidden) saveUi(); });
+
+async function go(page) {
+  if (page === 'admin' && !isAdmin()) page = 'dashboard';
+  S.page = page;
+  try { localStorage.setItem('tf_page', page); } catch (e) {}
+  if (location.hash !== '#/' + page) { try { history.replaceState(null, '', '#/' + page); } catch (e) { location.hash = '#/' + page; } }
+  document.querySelectorAll('.page').forEach((p) => p.classList.toggle('on', p.id === 'pg-' + page));
+  document.querySelectorAll('.nav [data-page]').forEach((b) => b.classList.toggle('on', b.getAttribute('data-page') === page));
+  $('pg-title').textContent = TITLES[page][0];
+  $('pg-sub').textContent = TITLES[page][1];
+  saveUi();
+  closeSide(); closePops();
+  if (!S.loaded) { $('pg-' + page).innerHTML = loadingHtml; return; }
+  const r = { dashboard: renderDashboard, tasks: renderTasks, calendar: renderCalendar, analytics: renderAnalytics, team: renderTeam, admin: renderAdmin, settings: renderSettings }[page];
+  try { await r(); } catch (e) { quiet(e); }
+}
+
+/* ───────── data ───────── */
+async function loadTasks() { S.tasks = await api('GET', '/tasks' + (isAdmin() && S.scope === 'all' ? '?scope=all' : '')); }
+async function loadTeam() { S.team = await api('GET', '/team'); }
+async function loadPending() { S.pending = isAdmin() ? await api('GET', '/admin/pending-users') : []; }
+async function loadDash() {
+  try { S.dash = await api('GET', '/dashboard' + (isAdmin() && S.scope === 'me' ? '?scope=me' : '')); }
+  catch (e) {
+    quiet(e);
+    S.dash = { scope: 'me', counts: { total: 0, done: 0, inProgress: 0, todo: 0 }, changes: { total: 0, done: 0, inProgress: 0, todo: 0 }, completionRate: 0, monthly: MON.map((m, i) => ({ month: i, created: 0, completed: 0 })), byPriority: { high: 0, medium: 0, low: 0 }, categories: [], overdue: 0, dueSoon: 0 };
+  }
+}
+async function refreshData() {
+  const r = await Promise.allSettled([loadTasks(), loadTeam(), loadDash(), loadPending().catch(() => { S.pending = []; })]);
+  const failed = r.slice(0, 2).find((x) => x.status === 'rejected');
+  if (failed) {
+    if (failed.reason && failed.reason.message === 'Unauthorized') return;
+    $('pg-' + S.page).innerHTML = errorHtml((failed.reason && failed.reason.message) || 'Could not load your data.');
+    return;
+  }
+  S.loaded = true;
+  updateBell();
+  updatePendingBadge();
+  await go(S.page);
+}
+async function changeScope(v) {
+  S.scope = v; S.dash = null;
+  await refreshData();
+}
+
+/* ───────── shared bits ───────── */
+function scopeRow() {
+  if (!isAdmin()) return '';
+  return '<div class="scope-row"><span class="hint">Showing</span><select class="select" data-scope aria-label="Data scope">' +
+    '<option value="all"' + (S.scope === 'all' ? ' selected' : '') + '>Whole workspace</option>' +
+    '<option value="me"' + (S.scope === 'me' ? ' selected' : '') + '>Only my tasks</option></select></div>';
+}
+function sortTasks(list, mode) {
+  const po = { high: 0, medium: 1, low: 2 };
+  return list.sort((a, b) => {
+    if (mode === 'oldest') return new Date(a.createdAt) - new Date(b.createdAt);
+    if (mode === 'due') { const x = dueKey(a) || '9999', y = dueKey(b) || '9999'; return x < y ? -1 : x > y ? 1 : 0; }
+    if (mode === 'priority') return po[a.priority] - po[b.priority];
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
+}
+function matchTask(t, q) {
+  return (t.title + ' ' + (t.description || '') + ' ' + (t.category || '') + ' ' + (t.ownerName || '')).toLowerCase().indexOf(q.toLowerCase()) > -1;
+}
+function donut(size, parts, centerHtml) {
+  const r = size / 2 - 14, C = 2 * Math.PI * r, total = parts.reduce((a, p) => a + p.v, 0), mid = size / 2;
+  let off = 0, segs = '<circle cx="' + mid + '" cy="' + mid + '" r="' + r + '" fill="none" stroke="#e4e4e9" stroke-width="20"/>';
+  if (total) parts.forEach((p) => {
+    if (!p.v) return;
+    const len = (p.v / total) * C;
+    segs += '<circle cx="' + mid + '" cy="' + mid + '" r="' + r + '" fill="none" stroke="' + p.color + '" stroke-width="20" stroke-dasharray="' + len + ' ' + (C - len) + '" stroke-dashoffset="' + (-off) + '" transform="rotate(-90 ' + mid + ' ' + mid + ')"/>';
+    off += len;
+  });
+  return '<div class="donut"><svg width="' + size + '" height="' + size + '" role="img" aria-label="Task progress">' + segs + '</svg><div class="donut-c">' + centerHtml + '</div></div>';
+}
+function assigneeCell(t) {
+  return '<div class="u-cell">' + avatar(t.ownerName, true) + '<span>' + esc(t.userId === S.user._id ? 'You' : t.ownerName) + '</span></div>';
+}
+function dueHtml(t) {
+  const k = dueKey(t); if (!k) return '<span class="hint">No date</span>';
+  const over = isOverdue(t);
+  return '<span class="due' + (over ? ' over' : '') + '">' + ic('clock', 13) + fmtDay(k) + (over ? ' · overdue' : '') + '</span>';
+}
+
+/* ───────── dashboard ───────── */
+function memberState(m) {
+  const s = m.stats || {total:0, done:0, inProgress:0};
+  if (!s.total) return ['cat', 'No tasks'];
+  if (s.done === s.total) return ['complete', 'Complete'];
+  if (s.inProgress > 0) return ['progress', 'In progress'];
+  return ['pending', 'Pending'];
+}
+function statCard(label, k) {
+  const c = S.dash.counts[k], d = S.dash.changes[k];
+  const word = d === 0 ? 'No change' : d > 0 ? 'Increased' : 'Decreased';
+  return '<div class="card stat"><div class="lbl">' + label + '</div><div class="num">' + c + '</div>' +
+    '<div class="delta"><i class="' + (d < 0 ? 'neg' : '') + '">' + (d < 0 ? '↓' : '↑') + ' ' + Math.abs(d) + '%</i>' + word + ' from last month</div></div>';
+}
+function dashRows() {
+  let list = S.tasks.slice();
+  if (S.dt.priority) list = list.filter((t) => t.priority === S.dt.priority);
+  if (S.dt.search) list = list.filter((t) => matchTask(t, S.dt.search));
+  return sortTasks(list, S.dt.sort);
+}
+function dashTbody() {
+  const rows = dashRows();
+  if (!rows.length) return '<tr><td colspan="8"><div class="empty"><b>No tasks yet</b>Use “Add Task” to create the first one.</div></td></tr>';
+  return rows.slice(0, 8).map((t) =>
+    '<tr data-act="edit-task" data-id="' + esc(t._id) + '" style="cursor:pointer"><td class="mono">' + shortId(t._id) + '</td>' +
+    '<td><b style="font-weight:500">' + esc(t.title) + '</b></td><td>' + assigneeCell(t) + '</td>' +
+    '<td><span class="chip cat">' + esc(t.category) + '</span></td><td><span class="chip ' + t.priority + '">' + t.priority + '</span></td>' +
+    '<td>' + dueHtml(t) + '</td><td>' + statusChip(t.status) + '</td>' +
+    '<td><div class="acts"><button class="icon-btn" data-act="edit-task" data-id="' + esc(t._id) + '" aria-label="Edit">' + ic('edit', 16) + '</button>' +
+    '<button class="icon-btn danger" data-act="delete-task" data-id="' + esc(t._id) + '" aria-label="Delete">' + ic('trash', 16) + '</button></div></td></tr>').join('');
+}
+function renderDashboard() {
+  const d = S.dash, c = d.counts, ws = d.scope === 'workspace';
+  const vals = d.monthly.map((m) => m[S.chartKey]), max = Math.max.apply(null, vals), top = max > 0 ? vals.indexOf(max) : -1;
+  const bars = vals.map((v, i) =>
+    '<div class="bar-col' + (i === top ? ' top' : '') + '"><div class="bar-wrap">' + (i === top ? '<span class="top-pill">Top</span>' : '') +
+    '<div class="bar" style="height:' + (max ? (v / max) * 100 : 0) + '%" title="' + MONTHS[i] + ': ' + v + '"></div></div><small>' + MON[i] + '</small></div>').join('');
+
+  const team = S.team.slice().sort((a, b) => (b.stats ? b.stats.total : 0) - (a.stats ? a.stats.total : 0)).slice(0, 5);
+  const teamHtml = team.map((m) => {
+    const st = memberState(m);
+    return '<div class="member">' + avatar(m) + '<div class="who"><b>' + esc(m.name) + '</b><small>' + esc(m.email) + '</small></div><span class="chip ' + st[0] + '">' + st[1] + '</span></div>';
+  }).join('') || '<div class="empty">No members yet.</div>';
+
+  $('pg-dashboard').innerHTML = scopeRow() +
+    '<div class="dash">' +
+      '<div class="d-chart card"><div class="card-h"><h3>Task Analytics</h3><select class="select" id="chart-key" aria-label="Chart data"><option value="created"' + (S.chartKey === 'created' ? ' selected' : '') + '>Created</option><option value="completed"' + (S.chartKey === 'completed' ? ' selected' : '') + '>Completed</option></select></div><div class="bars">' + bars + '</div></div>' +
+      statCard(ws ? 'Total Tasks' : 'My Tasks', 'total') + statCard('Completed Tasks', 'done') +
+      statCard('Running Tasks', 'inProgress') + statCard('Pending Tasks', 'todo') +
+      '<div class="card d-team"><div class="card-h"><h3>Team Collaboration</h3><button class="icon-btn" style="border:1px solid var(--line)" data-act="' + (isAdmin() ? 'new-user' : 'goto-team') + '" aria-label="' + (isAdmin() ? 'Add member' : 'View team') + '">' + ic('plus', 16) + '</button></div>' + teamHtml + '</div>' +
+      '<div class="card d-prog"><div class="card-h"><h3>Task Progress</h3></div>' +
+        donut(214, [{ v: c.done, color: '#6d44f0' }, { v: c.inProgress, color: '#b39cf7' }, { v: c.todo, color: '#dcdce2' }], '<b>' + d.completionRate + '%</b><span>Progress</span>') +
+        '<div class="legend"><span><i style="background:#6d44f0"></i>Complete</span><span><i style="background:#b39cf7"></i>In progress</span><span><i style="background:#dcdce2"></i>To do</span></div></div>' +
+      '<div class="card d-table"><div class="card-h sm" style="flex-wrap:wrap"><div class="u-cell"><span class="avatar sm" style="background:var(--accent-soft);color:var(--accent)">' + ic('tasks', 15) + '</span><h3 style="font-weight:500">Recent tasks: ' + S.tasks.length + '</h3></div>' +
+        '<div class="tools"><div class="sbox"><span class="lead ic">' + ic('search', 15) + '</span><input id="dt-search" placeholder="Search tasks" value="' + esc(S.dt.search) + '"></div>' +
+        '<button class="btn btn-ghost btn-sm" data-act="export-tasks">' + ic('download', 15) + 'Export</button>' +
+        '<select class="select" id="dt-priority" aria-label="Filter priority"><option value="">Filter: all</option><option value="high"' + (S.dt.priority === 'high' ? ' selected' : '') + '>High</option><option value="medium"' + (S.dt.priority === 'medium' ? ' selected' : '') + '>Medium</option><option value="low"' + (S.dt.priority === 'low' ? ' selected' : '') + '>Low</option></select>' +
+        '<select class="select" id="dt-sort" aria-label="Sort tasks"><option value="newest">Sort: newest</option><option value="oldest"' + (S.dt.sort === 'oldest' ? ' selected' : '') + '>Oldest</option><option value="due"' + (S.dt.sort === 'due' ? ' selected' : '') + '>Due date</option><option value="priority"' + (S.dt.sort === 'priority' ? ' selected' : '') + '>Priority</option></select></div></div>' +
+        '<div class="tbl-wrap"><table><thead><tr><th>ID</th><th>Task</th><th>Assignee</th><th>Category</th><th>Priority</th><th>Due</th><th>Status</th><th>Action</th></tr></thead><tbody id="dt-body">' + dashTbody() + '</tbody></table></div></div>' +
+    '</div>';
+
+  $('chart-key').addEventListener('change', (e) => { S.chartKey = e.target.value; renderDashboard(); });
+  $('dt-search').addEventListener('input', (e) => { S.dt.search = e.target.value; $('dt-body').innerHTML = dashTbody(); });
+  $('dt-priority').addEventListener('change', (e) => { S.dt.priority = e.target.value; $('dt-body').innerHTML = dashTbody(); });
+  $('dt-sort').addEventListener('change', (e) => { S.dt.sort = e.target.value; $('dt-body').innerHTML = dashTbody(); });
+}
+
+/* ───────── tasks page ───────── */
+function visibleTasks() {
+  const f = S.tf;
+  let list = S.tasks.slice();
+  if (f.status !== 'all') list = list.filter((t) => t.status === f.status);
+  if (f.priority) list = list.filter((t) => t.priority === f.priority);
+  if (f.search) list = list.filter((t) => matchTask(t, f.search));
+  return sortTasks(list, f.sort);
+}
+function taskRow(t) {
+  const mine = t.userId === S.user._id;
+  return '<div class="task ' + (t.status === 'done' ? 'done' : '') + '" data-p="' + t.priority + '">' +
+    '<button class="check" data-act="toggle-task" data-id="' + esc(t._id) + '" aria-label="Toggle done">' + (t.status === 'done' ? ic('check', 13) : '') + '</button>' +
+    '<div class="t-body"><div class="t-title">' + esc(t.title) + '</div>' + (t.description ? '<div class="t-desc">' + esc(t.description) + '</div>' : '') +
+    '<div class="t-meta"><span class="chip ' + t.priority + '">' + t.priority + '</span>' + statusChip(t.status) + '<span class="chip cat">' + esc(t.category) + '</span>' +
+    (mine ? '' : '<span class="chip admin">' + esc(t.ownerName) + '</span>') + dueHtml(t) + '</div></div>' +
+    '<div class="acts"><button class="icon-btn" data-act="edit-task" data-id="' + esc(t._id) + '" aria-label="Edit task">' + ic('edit', 16) + '</button>' +
+    '<button class="icon-btn danger" data-act="delete-task" data-id="' + esc(t._id) + '" aria-label="Delete task">' + ic('trash', 16) + '</button></div></div>';
+}
+function kcard(t) {
+  return '<div class="kcard" draggable="true" data-id="' + esc(t._id) + '" data-act="edit-task"><div class="t-title">' + esc(t.title) + '</div>' +
+    '<div class="t-meta"><span class="chip ' + t.priority + '">' + t.priority + '</span>' + dueHtml(t) + '</div>' +
+    '<div class="u-cell" style="margin-top:10px">' + avatar(t.ownerName, true) + '<small style="margin:0">' + esc(t.ownerName) + '</small></div></div>';
+}
+function fillTaskArea() {
+  const list = visibleTasks(), area = $('tk-area');
+  if (!list.length) { area.innerHTML = '<div class="card empty"><b>No tasks found</b>Try a different filter, or add a new task.</div>'; return; }
+  if (S.view === 'list') { area.innerHTML = '<div class="tasklist">' + list.map(taskRow).join('') + '</div>'; return; }
+  area.innerHTML = '<div class="kanban">' + [['todo', 'To Do'], ['in-progress', 'In Progress'], ['done', 'Done']].map((c) => {
+    const items = list.filter((t) => t.status === c[0]);
+    return '<div class="col" data-status="' + c[0] + '"><div class="col-h">' + c[1] + '<span>' + items.length + '</span></div>' + (items.map(kcard).join('') || '<div class="hint" style="text-align:center;padding:16px">Drop tasks here</div>') + '</div>';
+  }).join('') + '</div>';
+}
+function renderTasks() {
+  const f = S.tf, cnt = { all: S.tasks.length, todo: 0, 'in-progress': 0, done: 0 };
+  S.tasks.forEach((t) => { cnt[t.status]++; });
+  const mineDone = S.tasks.filter((t) => t.userId === S.user._id && t.status === 'done').length;
+  const opt = (v, cur, label) => '<option value="' + v + '"' + (cur === v ? ' selected' : '') + '>' + label + '</option>';
+  $('pg-tasks').innerHTML =
+    '<div class="bar-tools"><div class="pills">' + ['all', 'todo', 'in-progress', 'done'].map((k) => '<button class="pill' + (f.status === k ? ' on' : '') + '" data-act="tk-status" data-v="' + k + '">' + (k === 'all' ? 'All' : STATUS_LABEL[k]) + ' (' + cnt[k] + ')</button>').join('') + '</div>' +
+    '<div class="tools"><div class="sbox"><span class="lead ic">' + ic('search', 15) + '</span><input id="tk-search" placeholder="Search tasks" value="' + esc(f.search) + '"></div>' +
+    '<select class="select" id="tk-priority" aria-label="Priority">' + opt('', f.priority, 'All priorities') + opt('high', f.priority, 'High') + opt('medium', f.priority, 'Medium') + opt('low', f.priority, 'Low') + '</select>' +
+    '<select class="select" id="tk-sort" aria-label="Sort">' + opt('newest', f.sort, 'Newest') + opt('oldest', f.sort, 'Oldest') + opt('due', f.sort, 'Due date') + opt('priority', f.sort, 'Priority') + '</select>' +
+    (isAdmin() ? '<select class="select" data-scope aria-label="Scope">' + opt('all', S.scope, 'All tasks') + opt('me', S.scope, 'My tasks') + '</select>' : '') +
+    '<div class="seg"><button class="' + (S.view === 'list' ? 'on' : '') + '" data-act="view-list" aria-label="List view">' + ic('list', 16) + '</button><button class="' + (S.view === 'kanban' ? 'on' : '') + '" data-act="view-kanban" aria-label="Board view">' + ic('kanban', 16) + '</button></div>' +
+    '<button class="btn btn-ghost btn-sm" data-act="export-tasks">' + ic('download', 15) + 'Export</button>' +
+    (mineDone ? '<button class="btn btn-ghost btn-sm" data-act="clear-done">Clear my completed</button>' : '') +
+    '</div></div><div id="tk-area"></div>';
+  fillTaskArea();
+  $('tk-search').addEventListener('input', (e) => { S.tf.search = e.target.value; fillTaskArea(); });
+  $('tk-priority').addEventListener('change', (e) => { S.tf.priority = e.target.value; fillTaskArea(); });
+  $('tk-sort').addEventListener('change', (e) => { S.tf.sort = e.target.value; fillTaskArea(); });
+}
+
+/* ───────── calendar ───────── */
+function renderCalendar() {
+  const y = S.cal.getFullYear(), m = S.cal.getMonth(), first = new Date(y, m, 1);
+  const days = new Date(y, m + 1, 0).getDate(), total = Math.ceil((first.getDay() + days) / 7) * 7;
+  const map = {}; S.tasks.forEach((t) => { const k = dueKey(t); if (k) (map[k] = map[k] || []).push(t); });
+  let cells = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => '<div class="cal-dow">' + d + '</div>').join('');
+  for (let i = 0; i < total; i++) {
+    const d = new Date(y, m, 1 - first.getDay() + i), k = keyOf(d), ev = map[k] || [];
+    cells += '<div class="cal-day' + (d.getMonth() !== m ? ' out' : '') + (k === todayKey() ? ' today' : '') + '" data-act="cal-day" data-k="' + k + '"><span class="n">' + d.getDate() + '</span>' +
+      ev.slice(0, 3).map((t) => '<button class="ev ' + (t.status === 'done' ? 'done' : t.priority === 'high' ? 'high' : '') + '" data-act="edit-task" data-id="' + esc(t._id) + '" title="' + esc(t.title) + '">' + esc(t.title) + '</button>').join('') +
+      (ev.length > 3 ? '<span class="more">+' + (ev.length - 3) + ' more</span>' : '') + '</div>';
+  }
+  $('pg-calendar').innerHTML = scopeRow() +
+    '<div class="card"><div class="cal-h"><h3>' + MONTHS[m] + ' ' + y + '</h3>' +
+    '<button class="btn btn-ghost btn-sm" data-act="cal-today">Today</button>' +
+    '<button class="icon-btn" style="border:1px solid var(--line)" data-act="cal-prev" aria-label="Previous month">' + ic('left', 16) + '</button>' +
+    '<button class="icon-btn" style="border:1px solid var(--line)" data-act="cal-next" aria-label="Next month">' + ic('right', 16) + '</button></div>' +
+    '<div class="cal">' + cells + '</div><p class="hint" style="margin-top:12px">Click a day to add a task due that date.</p></div>';
+}
+
+/* ───────── analytics ───────── */
+function hbars(items, color) {
+  const max = Math.max.apply(null, items.map((i) => i.v).concat([1]));
+  return items.map((i) => '<div class="hbar"><div class="hbar-h"><span>' + esc(i.label) + '</span><b style="font-weight:600">' + i.v + '</b></div><div class="hbar-t"><i style="width:' + (i.v / max) * 100 + '%;background:' + (i.color || color || 'var(--accent)') + '"></i></div></div>').join('') || '<div class="empty">No data yet.</div>';
+}
+function renderAnalytics() {
+  const d = S.dash, c = d.counts;
+  const max = Math.max.apply(null, d.monthly.map((m) => Math.max(m.created, m.completed)).concat([1]));
+  const cols = d.monthly.map((m, i) =>
+    '<div class="bar-col"><div class="bar-wrap"><div class="pair"><i style="height:' + (m.created / max) * 100 + '%;background:var(--bar-top)" title="Created: ' + m.created + '"></i><i style="height:' + (m.completed / max) * 100 + '%;background:var(--accent)" title="Completed: ' + m.completed + '"></i></div></div><small>' + MON[i] + '</small></div>').join('');
+  $('pg-analytics').innerHTML = scopeRow() +
+    '<div class="kpis">' +
+      '<div class="card kpi"><div class="lbl">Completion rate</div><div class="num">' + d.completionRate + '%</div></div>' +
+      '<div class="card kpi"><div class="lbl">Overdue</div><div class="num" style="color:' + (d.overdue ? 'var(--red)' : 'inherit') + '">' + d.overdue + '</div></div>' +
+      '<div class="card kpi"><div class="lbl">Due in 7 days</div><div class="num">' + d.dueSoon + '</div></div>' +
+      '<div class="card kpi"><div class="lbl">Total tasks</div><div class="num">' + c.total + '</div></div></div>' +
+    '<div class="grid2"><div class="card"><div class="card-h"><h3>Created vs completed</h3><div class="key"><span><i style="background:var(--bar-top)"></i>Created</span><span><i style="background:var(--accent)"></i>Completed</span></div></div><div class="bars">' + cols + '</div></div>' +
+    '<div class="card"><div class="card-h"><h3>Status</h3></div>' + donut(190, [{ v: c.done, color: '#6d44f0' }, { v: c.inProgress, color: '#b39cf7' }, { v: c.todo, color: '#dcdce2' }], '<b>' + c.total + '</b><span>Tasks</span>') +
+    '<div class="legend"><span><i style="background:#6d44f0"></i>Done ' + c.done + '</span><span><i style="background:#b39cf7"></i>Active ' + c.inProgress + '</span><span><i style="background:#dcdce2"></i>To do ' + c.todo + '</span></div></div></div>' +
+    '<div class="grid2 eq"><div class="card"><div class="card-h sm"><h3>By priority</h3></div>' +
+      hbars([{ label: 'High', v: d.byPriority.high, color: 'var(--red)' }, { label: 'Medium', v: d.byPriority.medium, color: '#e2a72e' }, { label: 'Low', v: d.byPriority.low, color: '#3fb984' }]) + '</div>' +
+    '<div class="card"><div class="card-h sm"><h3>Top categories</h3></div>' + hbars(d.categories.map((x) => ({ label: x.name, v: x.count }))) + '</div></div>';
+}
+
+/* ───────── team ───────── */
+function teamRows() {
+  const f = S.tm, q = f.search.toLowerCase();
+  let list = S.team.slice();
+  if (f.role === 'disabled') list = list.filter((u) => !u.active);
+  else if (f.role) list = list.filter((u) => u.role === f.role);
+  if (q) list = list.filter((u) => (u.name + ' ' + u.email + ' ' + (u.department||'')).toLowerCase().indexOf(q) > -1);
+  list.sort((a, b) => {
+    if (f.sort === 'tasks') return (b.stats?b.stats.total:0) - (a.stats?a.stats.total:0);
+    if (f.sort === 'newest') return new Date(b.createdAt) - new Date(a.createdAt);
+    return a.name.localeCompare(b.name);
+  });
+  return list;
+}
+function teamTbody(manage) {
+  const rows = teamRows();
+  if (!rows.length) return '<tr><td colspan="' + (manage ? 7 : 6) + '"><div class="empty"><b>No members found</b>Try a different search or filter.</div></td></tr>';
+  return rows.map((u) => {
+    const self = u._id === S.user._id, id = esc(u._id);
+    const st = u.stats || {done:0, total:0};
+    return '<tr><td class="mono">' + shortId(u._id) + '</td>' +
+      '<td><div class="u-cell">' + avatar(u) + '<div><b style="font-weight:500">' + esc(u.name) + (self ? ' <span class="hint">(you)</span>' : '') + '</b><small>' + esc(u.email) + '</small></div></div></td>' +
+      '<td>' + esc(u.title || 'Member') + '<br><small class="hint">' + esc(u.department || 'General') + '</small></td><td><span class="chip ' + (u.role === 'admin' ? 'admin' : 'plain') + '">' + (u.role === 'admin' ? 'Admin' : 'Member') + '</span></td>' +
+      '<td>' + st.done + ' / ' + st.total + ' done</td>' +
+      '<td><span class="chip ' + (u.active ? 'active' : 'disabled') + '">' + (u.active ? 'Active' : 'Disabled') + '</span></td>' +
+      (manage ? '<td><div class="acts">' +
+        '<button class="icon-btn" data-act="edit-user" data-id="' + id + '" title="Edit" aria-label="Edit member">' + ic('edit', 16) + '</button>' +
+        '<button class="icon-btn" data-act="reset-user" data-id="' + id + '" title="Reset password" aria-label="Reset password">' + ic('key', 16) + '</button>' +
+        (self ? '' : '<button class="icon-btn" data-act="toggle-user" data-id="' + id + '" title="' + (u.active ? 'Disable access' : 'Enable access') + '" aria-label="Toggle access">' + ic('ban', 16) + '</button>' +
+          '<button class="icon-btn danger" data-act="delete-user-modal" data-id="' + id + '" title="Remove" aria-label="Remove member">' + ic('trash', 16) + '</button>') +
+        '</div></td>' : '') + '</tr>';
+  }).join('');
+}
+
+// Read-only directory — every signed-in user can see who's in the workspace
+// and how their work is going, but management lives only in the Admin Panel.
+async function renderTeam() {
+  try { await loadTeam(); } catch (e) { quiet(e); }
+  const f = S.tm;
+  const opt = (v, cur, l) => '<option value="' + v + '"' + (cur === v ? ' selected' : '') + '>' + l + '</option>';
+  $('pg-team').innerHTML = '<div class="card"><div class="card-h sm" style="flex-wrap:wrap"><div class="u-cell"><span class="avatar sm" style="background:var(--accent-soft);color:var(--accent)">' + ic('users', 15) + '</span><h3 style="font-weight:500">Total Employee: ' + S.team.length + '</h3></div>' +
+    '<div class="tools"><div class="sbox"><span class="lead ic">' + ic('search', 15) + '</span><input id="tm-search" placeholder="Search name or email" value="' + esc(f.search) + '"></div>' +
+    '<button class="btn btn-ghost btn-sm" data-act="export-team">' + ic('download', 15) + 'Export</button>' +
+    '<select class="select" id="tm-role" aria-label="Filter">' + opt('', f.role, 'Filter: all') + opt('admin', f.role, 'Admins') + opt('user', f.role, 'Members') + opt('disabled', f.role, 'Disabled') + '</select>' +
+    '<select class="select" id="tm-sort" aria-label="Sort">' + opt('name', f.sort, 'Sort: name') + opt('tasks', f.sort, 'Most tasks') + opt('newest', f.sort, 'Newest') + '</select></div></div>' +
+    '<div class="tbl-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>Title</th><th>User Type</th><th>Tasks</th><th>Status</th></tr></thead><tbody id="tm-body">' + teamTbody(false) + '</tbody></table></div></div>';
+  $('tm-search').addEventListener('input', (e) => { S.tm.search = e.target.value; $('tm-body').innerHTML = teamTbody(false); });
+  $('tm-role').addEventListener('change', (e) => { S.tm.role = e.target.value; $('tm-body').innerHTML = teamTbody(false); });
+  $('tm-sort').addEventListener('change', (e) => { S.tm.sort = e.target.value; $('tm-body').innerHTML = teamTbody(false); });
+}
+
+/* ───────── admin panel ───────── */
+// Everything workspace-administrative lives here, separate from what a
+// regular member ever sees: creating/editing/removing accounts, resetting
+// passwords, workspace name and sign-up policy, and workspace-wide cleanup.
+async function renderAdmin() {
+  if (!isAdmin()) return;
+  try { await Promise.all([loadTeam(), loadPending()]); } catch (e) { quiet(e); }
+  updatePendingBadge();
+  try { S.settings = await api('GET', '/admin/settings'); } catch (e) { quiet(e); }
+  const f = S.tm, st = S.settings || { workspaceName: '' };
+  const opt = (v, cur, l) => '<option value="' + v + '"' + (cur === v ? ' selected' : '') + '>' + l + '</option>';
+
+  $('pg-admin').innerHTML =
+    (S.pending.length ? '<div class="card" style="margin-bottom:20px"><div class="card-h sm"><div class="u-cell"><span class="avatar sm" style="background:var(--red-soft,#fde3e3);color:var(--red)">' + ic('userplus', 15) + '</span><h3 style="font-weight:500">Pending Approvals (' + S.pending.length + ')</h3></div></div>' +
+      '<div class="tbl-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Requested</th><th>Action</th></tr></thead><tbody>' +
+      S.pending.map((p) => '<tr><td><div class="u-cell">' + avatar(p) + '<b style="font-weight:500">' + esc(p.name) + '</b></div></td>' +
+        '<td>' + esc(p.email) + '</td><td>' + fmtDay(p.createdAt ? p.createdAt.substring(0, 10) : '') + '</td>' +
+        '<td><div class="acts"><button class="btn btn-primary btn-sm" data-act="approve-user" data-id="' + esc(p._id) + '">Approve</button>' +
+        '<button class="btn btn-ghost btn-sm" data-act="reject-user" data-id="' + esc(p._id) + '">Decline</button></div></td></tr>').join('') +
+      '</tbody></table></div></div>' : '') +
+
+    '<div class="card"><div class="card-h sm" style="flex-wrap:wrap"><div class="u-cell"><span class="avatar sm" style="background:var(--accent-soft);color:var(--accent)">' + ic('users', 15) + '</span><h3 style="font-weight:500">Manage Members (' + S.team.length + ')</h3></div>' +
+      '<div class="tools"><div class="sbox"><span class="lead ic">' + ic('search', 15) + '</span><input id="am-search" placeholder="Search name or email" value="' + esc(f.search) + '"></div>' +
+      '<select class="select" id="am-role" aria-label="Filter">' + opt('', f.role, 'Filter: all') + opt('admin', f.role, 'Admins') + opt('user', f.role, 'Members') + opt('disabled', f.role, 'Disabled') + '</select>' +
+      '<select class="select" id="am-sort" aria-label="Sort">' + opt('name', f.sort, 'Sort: name') + opt('tasks', f.sort, 'Most tasks') + opt('newest', f.sort, 'Newest') + '</select>' +
+      '<button class="btn btn-primary btn-sm" data-act="new-user">' + ic('userplus', 15) + 'Add member</button></div></div>' +
+      '<div class="tbl-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>Title</th><th>User Type</th><th>Tasks</th><th>Status</th><th>Action</th></tr></thead><tbody id="am-body">' + teamTbody(true) + '</tbody></table></div></div>' +
+
+    '<div class="set-grid" style="margin-top:20px">' +
+      '<div class="card"><div class="card-h sm"><h3>Workspace Settings</h3></div>' +
+        '<form id="ws-form" novalidate><div class="field"><label for="ws-in">Workspace name</label><input id="ws-in" maxlength="40" value="' + esc(st.workspaceName) + '"></div>' +
+        '<button class="btn btn-ghost btn-sm" type="submit">Save name</button></form>' +
+        '<p class="hint" style="margin-top:14px">Anyone can request an account from the sign-up form, but it stays pending until approved above. Adding a member from this page skips that queue.</p></div>' +
+
+      '<div class="card"><div class="card-h sm"><h3>Workspace Maintenance</h3></div>' +
+        '<div class="toggle" style="align-items:flex-start"><div><b>Export Workspace Data</b><span class="hint">Download a JSON backup of all tasks and members.</span></div>' +
+        '<button class="btn btn-ghost btn-sm" data-act="export-backup">' + ic('download', 14) + ' Backup</button></div>' +
+        '<div class="toggle" style="border-top:1px solid var(--line);padding-top:16px;align-items:flex-start"><div><b>Purge Completed Tasks</b><span class="hint">Permanently delete all workspace-wide completed tasks.</span></div>' +
+        '<button class="btn btn-danger btn-sm" data-act="purge-workspace-done">' + ic('trash', 14) + ' Purge Tasks</button></div></div>' +
+    '</div>';
+
+  $('am-search').addEventListener('input', (e) => { S.tm.search = e.target.value; $('am-body').innerHTML = teamTbody(true); });
+  $('am-role').addEventListener('change', (e) => { S.tm.role = e.target.value; $('am-body').innerHTML = teamTbody(true); });
+  $('am-sort').addEventListener('change', (e) => { S.tm.sort = e.target.value; $('am-body').innerHTML = teamTbody(true); });
+  $('ws-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    try {
+      S.settings = await api('PATCH', '/admin/settings', { workspaceName: $('ws-in').value });
+      S.config = Object.assign({}, S.config, { workspaceName: S.settings.workspaceName }); applyChrome(); toast('Workspace renamed.');
+    } catch (err) { quiet(err); }
+  });
+}
+
+/* ───────── settings ───────── */
+async function renderSettings() {
+  const u = S.user, admin = isAdmin();
+  $('pg-settings').innerHTML = '<div class="set-grid">' +
+    '<div class="card"><div class="card-h sm"><h3>Profile</h3><span class="chip ' + (admin ? 'admin' : 'plain') + '">' + (admin ? 'Admin' : 'Member') + '</span></div>' +
+      '<div class="u-cell" style="margin-bottom:18px;gap:14px">' +
+        '<span id="pf-avatar-preview">' + avatar(u) + '</span>' +
+        '<div><button type="button" class="btn btn-ghost btn-sm" id="btn-pick-avatar">Change photo</button> ' +
+        (u.avatar ? '<button type="button" class="btn btn-ghost btn-sm" id="btn-remove-avatar">Remove</button>' : '') +
+        '<input type="file" id="pf-avatar-file" accept="image/*" class="hidden"><div class="hint" style="margin-top:6px">JPG or PNG, square photos look best.</div></div>' +
+      '</div>' +
+      '<form id="pf-form" novalidate><div class="field"><label for="pf-name">Full name</label><input id="pf-name" value="' + esc(u.name) + '"></div>' +
+      '<div class="field"><label for="pf-dep">Department</label><input id="pf-dep" value="' + esc(u.department || 'General') + '"></div>' +
+      '<div class="field"><label for="pf-title">Job Title</label><input id="pf-title" value="' + esc(u.title || 'Member') + '"></div>' +
+      '<div class="field"><label>Email</label><input value="' + esc(u.email) + '" disabled></div>' +
+      '<button class="btn btn-primary" type="submit">Save profile</button></form></div>' +
+    '<div class="card"><div class="card-h sm"><h3>Change password</h3></div>' +
+      '<form id="pw-form" novalidate><div class="field"><label for="pw-cur">Current password</label><input id="pw-cur" type="password" autocomplete="current-password"></div>' +
+      '<div class="field"><label for="pw-new">New password</label><input id="pw-new" type="password" autocomplete="new-password" placeholder="At least 8 characters"></div>' +
+      '<div class="field"><label for="pw-conf">Confirm new password</label><input id="pw-conf" type="password" autocomplete="new-password"></div>' +
+      '<button class="btn btn-primary" type="submit">Update password</button></form></div>' +
+    '</div>';
+
+  let pendingAvatar; // undefined = unchanged, '' = remove, data URI = new photo
+  $('btn-pick-avatar').addEventListener('click', () => $('pf-avatar-file').click());
+  if ($('btn-remove-avatar')) $('btn-remove-avatar').addEventListener('click', () => {
+    pendingAvatar = '';
+    $('pf-avatar-preview').innerHTML = avatar({ name: u.name, avatar: '' });
+  });
+  $('pf-avatar-file').addEventListener('change', async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    try {
+      pendingAvatar = await resizeImageToDataUrl(file, 160);
+      $('pf-avatar-preview').innerHTML = avatar({ name: u.name, avatar: pendingAvatar });
+    } catch (err) { toast('Could not read that image.', 'error'); }
+  });
+
+  $('pf-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    try {
+      const body = { name: $('pf-name').value, department: $('pf-dep').value, title: $('pf-title').value };
+      if (pendingAvatar !== undefined) body.avatar = pendingAvatar;
+      const nu = await api('PATCH', '/auth/profile', body);
+      saveSession(S.token, nu); applyChrome(); toast('Profile saved.'); loadTeam().catch(() => {}); renderSettings();
+    } catch (err) { quiet(err); }
+  });
+  $('pw-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if ($('pw-new').value !== $('pw-conf').value) { toast("New passwords don't match.", 'error'); return; }
+    try {
+      await api('POST', '/auth/change-password', { currentPassword: $('pw-cur').value, newPassword: $('pw-new').value });
+      toast('Password updated.'); e.target.reset();
+    } catch (err) { quiet(err); }
+  });
+}
+
+// Downscales any picked image to a small square JPEG data URI client-side,
+// so a phone photo doesn't turn into a multi-megabyte database write.
+function resizeImageToDataUrl(file, size) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('read failed'));
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('decode failed'));
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = size; canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        const side = Math.min(img.width, img.height);
+        const sx = (img.width - side) / 2, sy = (img.height - side) / 2;
+        ctx.drawImage(img, sx, sy, side, side, 0, 0, size, size);
+        resolve(canvas.toDataURL('image/jpeg', 0.85));
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+/* ───────── modals ───────── */
+function openModal(html) {
+  $('modal').innerHTML = html; mountIcons($('modal'));
+  $('overlay').classList.remove('hidden');
+  const first = $('modal').querySelector('input:not([disabled]),textarea,select');
+  if (first) setTimeout(() => first.focus(), 30);
+}
+function closeModal() { $('overlay').classList.add('hidden'); $('modal').innerHTML = ''; }
+const modalHead = (t) => '<div class="modal-h"><h2>' + t + '</h2><button class="icon-btn" data-act="close-modal" aria-label="Close"><i class="ic" data-i="x"></i></button></div>';
+
+// Replaces alert/confirm functions
+function confirmModal(title, message, confirmText, isDanger, onConfirm) {
+  openModal(modalHead(title) +
+    '<div class="modal-b"><p style="font-size:14px;color:var(--text);line-height:1.6">' + message + '</p></div>' +
+    '<div class="modal-f"><button type="button" class="btn btn-ghost" data-act="close-modal">Cancel</button>' +
+    '<button type="button" class="btn ' + (isDanger ? 'btn-danger' : 'btn-primary') + '" id="cm-confirm-btn">' + confirmText + '</button></div>');
+  $('cm-confirm-btn').addEventListener('click', () => { onConfirm(); closeModal(); });
+}
+
+function taskModal(t, due) {
+  const admin = isAdmin(), sel = (v, cur) => (v === cur ? ' selected' : '');
+  const p = t ? t.priority : 'medium', s = t ? t.status : 'todo';
+  const owner = t ? t.userId : S.user._id;
+  const people = admin ? S.team.filter((u) => u.active || u._id === owner) : [];
+  openModal(modalHead(t ? 'Edit task' : 'New task') +
+    '<form id="task-form" novalidate><div class="modal-b">' +
+    '<div class="field"><label for="f-title">Title</label><input id="f-title" maxlength="120" placeholder="What needs to be done?" value="' + esc(t ? t.title : '') + '"><div class="field-error" id="e-f-title"></div></div>' +
+    '<div class="field"><label for="f-desc">Description</label><textarea id="f-desc" placeholder="Add more details">' + esc(t ? t.description : '') + '</textarea></div>' +
+    '<div class="row2"><div class="field"><label for="f-pri">Priority</label><select id="f-pri"><option value="low"' + sel('low', p) + '>Low</option><option value="medium"' + sel('medium', p) + '>Medium</option><option value="high"' + sel('high', p) + '>High</option></select></div>' +
+    '<div class="field"><label for="f-sta">Status</label><select id="f-sta"><option value="todo"' + sel('todo', s) + '>To Do</option><option value="in-progress"' + sel('in-progress', s) + '>In Progress</option><option value="done"' + sel('done', s) + '>Done</option></select></div></div>' +
+    '<div class="row2"><div class="field"><label for="f-cat">Category</label><input id="f-cat" maxlength="30" value="' + esc(t ? t.category : 'General') + '"></div>' +
+    '<div class="field"><label for="f-due">Due date</label><input id="f-due" type="date" value="' + esc(t ? dueKey(t) : (due || '')) + '"></div></div>' +
+    (admin ? '<div class="field"><label for="f-who">Assign to</label><select id="f-who">' + people.map((u) => '<option value="' + esc(u._id) + '"' + sel(u._id, owner) + '>' + esc(u.name) + (u._id === S.user._id ? ' (you)' : '') + '</option>').join('') + '</select></div>' : '') +
+    '</div><div class="modal-f"><button type="button" class="btn btn-ghost" data-act="close-modal">Cancel</button><button type="submit" class="btn btn-primary">Save task</button></div></form>');
+  $('task-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    fieldErr('e-f-title');
+    const title = $('f-title').value.trim();
+    if (!title) { fieldErr('e-f-title', 'Give the task a title.'); $('f-title').focus(); return; }
+    const body = { title, description: $('f-desc').value.trim(), priority: $('f-pri').value, status: $('f-sta').value, category: $('f-cat').value.trim() || 'General', dueDate: $('f-due').value || null };
+    if (admin && $('f-who')) body.assigneeId = $('f-who').value;
+    const btn = e.target.querySelector('[type=submit]'); btn.disabled = true;
+    try {
+      await api(t ? 'PUT' : 'POST', t ? '/tasks/' + t._id : '/tasks', body);
+      closeModal(); toast(t ? 'Task updated.' : 'Task created.'); await refreshData();
+    } catch (err) { quiet(err); btn.disabled = false; }
+  });
+}
+
+function userModal(u) {
+  const edit = !!u, self = edit && u._id === S.user._id, sel = (v, c) => (v === c ? ' selected' : '');
+  openModal(modalHead(edit ? 'Edit member' : 'Add member') +
+    '<form id="user-form" novalidate><div class="modal-b">' +
+    '<div class="field"><label for="u-name">Full name</label><input id="u-name" value="' + esc(u ? u.name : '') + '" placeholder="Jordan Lee"></div>' +
+    '<div class="field"><label for="u-email">Email</label><input id="u-email" type="email" value="' + esc(u ? u.email : '') + '" placeholder="jordan@company.com"' + (edit ? ' disabled' : '') + '></div>' +
+    (edit ? '' : '<div class="field"><label for="u-pass">Temporary password</label><div class="pw"><input id="u-pass" type="text" value="' + genPass() + '" autocomplete="off"><button type="button" data-act="gen-pass" data-target="u-pass">New</button></div><span class="hint">Share this with the member. They can change it in Settings.</span></div>') +
+    '<div class="row2"><div class="field"><label for="u-dep">Department</label><input id="u-dep" value="' + esc(u ? u.department : 'General') + '"></div>' +
+    '<div class="field"><label for="u-title">Job Title</label><input id="u-title" value="' + esc(u ? u.title : '') + '" placeholder="e.g. Designer"></div></div>' +
+    '<div class="field"><label for="u-role">User type</label><select id="u-role"' + (self ? ' disabled' : '') + '><option value="user"' + sel('user', u ? u.role : 'user') + '>Member</option><option value="admin"' + sel('admin', u ? u.role : '') + '>Admin</option></select></div>' +
+    '<span class="hint">Only an admin can set this. Admins can add members, assign tasks and change access. Members manage their own tasks and profile.</span>' +
+    '</div><div class="modal-f"><button type="button" class="btn btn-ghost" data-act="close-modal">Cancel</button><button type="submit" class="btn btn-primary">' + (edit ? 'Save changes' : 'Create member') + '</button></div></form>');
+  $('user-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector('[type=submit]'); btn.disabled = true;
+    try {
+      if (edit) {
+        const patch = { name: $('u-name').value, department: $('u-dep').value, title: $('u-title').value };
+        if (!self) patch.role = $('u-role').value;
+        await api('PATCH', '/admin/users/' + u._id, patch);
+        closeModal(); toast('Member updated.');
+      } else {
+        const pass = $('u-pass').value, email = $('u-email').value.trim();
+        await api('POST', '/admin/users', { name: $('u-name').value, email, password: pass, department: $('u-dep').value, title: $('u-title').value, role: $('u-role').value });
+        closeModal(); await refreshData(); credentialsModal('', email, pass); return;
+      }
+      await refreshData();
+    } catch (err) { quiet(err); btn.disabled = false; }
+  });
+}
+function credentialsModal(_n, email, pass) {
+  openModal(modalHead('Member is ready') +
+    '<div class="modal-b"><p class="hint" style="margin-bottom:12px">Share these sign-in details with the member. The password is not shown again.</p>' +
+    '<div class="field"><label>Email</label><input readonly value="' + esc(email) + '"></div>' +
+    '<div class="field"><label>Temporary password</label><input readonly value="' + esc(pass) + '"></div></div>' +
+    '<div class="modal-f"><button class="btn btn-ghost" data-act="copy" data-text="' + esc('Email: ' + email + '\nPassword: ' + pass) + '">' + ic('copy', 15) + 'Copy details</button><button class="btn btn-primary" data-act="close-modal">Done</button></div>');
+}
+function resetModal(u) {
+  openModal(modalHead('Reset password') +
+    '<form id="reset-form" novalidate><div class="modal-b"><p class="hint" style="margin-bottom:12px">Set a new password for <b>' + esc(u.name) + '</b>.</p>' +
+    '<div class="field"><label for="r-pass">New password</label><div class="pw"><input id="r-pass" type="text" value="' + genPass() + '" autocomplete="off"><button type="button" data-act="gen-pass" data-target="r-pass">New</button></div></div></div>' +
+    '<div class="modal-f"><button type="button" class="btn btn-ghost" data-act="close-modal">Cancel</button><button type="submit" class="btn btn-primary">Reset password</button></div></form>');
+  $('reset-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const pass = $('r-pass').value;
+    try { await api('POST', '/admin/users/' + u._id + '/reset-password', { password: pass }); closeModal(); credentialsModal(u.name, u.email, pass); }
+    catch (err) { quiet(err); }
+  });
+}
+
+function promptDeleteUser(u) {
+  const others = S.team.filter(x => x._id !== u._id && x.active);
+  const opts = others.map(x => '<option value="' + x._id + '">' + esc(x.name) + '</option>').join('');
+  openModal(modalHead('Remove Member') +
+    '<form id="del-user-form"><div class="modal-b">' +
+    '<div class="alert" style="margin-bottom:18px"><b>Warning:</b> You are about to permanently remove <b>' + esc(u.name) + '</b> from the workspace. This action cannot be undone.</div>' +
+    '<div class="field"><label>What should happen to their tasks?</label>' +
+    '<select id="du-action"><option value="delete">Delete all of their tasks entirely</option>' + 
+    (opts ? '<option value="reassign">Reassign tasks to another member</option>' : '') + '</select></div>' +
+    (opts ? '<div class="field hidden" id="du-reassign-box"><label>Select Member to receive tasks</label><select id="du-assignee">' + opts + '</select></div>' : '') +
+    '</div><div class="modal-f"><button type="button" class="btn btn-ghost" data-act="close-modal">Cancel</button><button type="submit" class="btn btn-danger">Remove Member</button></div></form>'
+  );
+  if ($('du-action')) $('du-action').addEventListener('change', (e) => {
+    const box = $('du-reassign-box');
+    if (box) box.classList.toggle('hidden', e.target.value !== 'reassign');
+  });
+  $('del-user-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector('[type=submit]'); btn.disabled = true; btn.textContent = 'Removing...';
+    const act = $('du-action').value;
+    const reassignTo = act === 'reassign' ? $('du-assignee').value : null;
+    try {
+      await api('DELETE', '/admin/users/' + u._id, { action: act, reassignTo: reassignTo });
+      closeModal(); toast('Member and tasks updated.'); await refreshData();
+    } catch (err) { quiet(err); btn.disabled = false; btn.textContent = 'Remove Member'; }
+  });
+}
+
+function helpModal() {
+  openModal(modalHead('Help & shortcuts') +
+    '<div class="modal-b"><div class="kb"><kbd>Ctrl / ⌘ + K</kbd><span>Search tasks and members</span><kbd>N</kbd><span>Create a new task</span><kbd>Esc</kbd><span>Close dialogs and menus</span></div>' +
+    '<p class="hint" style="margin-top:16px">Tip: on the Tasks page, switch to the board view and drag cards between columns to change their status. Click any day in the Calendar to add a task for that date.' + (isAdmin() ? ' As an admin you can add members, assign tasks to them and control access from the Admin Panel.' : '') + '</p></div>' +
+    '<div class="modal-f"><button class="btn btn-primary" data-act="close-modal">Got it</button></div>');
+}
+
+/* ───────── popovers, notifications, search ───────── */
+function closePops() { ['g-pop', 'bell-pop', 'me-pop'].forEach((id) => $(id).classList.add('hidden')); }
+function bellItems() {
+  const soon = keyOf(new Date(Date.now() + 7 * 86400000));
+  return S.tasks.filter((t) => t.userId === S.user._id && t.status !== 'done' && dueKey(t) && dueKey(t) <= soon)
+    .sort((a, b) => (dueKey(a) < dueKey(b) ? -1 : 1));
+}
+function updateBell() {
+  const n = bellItems().length, b = $('bell-n');
+  b.textContent = n; b.classList.toggle('hidden', !n);
+}
+function updatePendingBadge() {
+  const el = $('admin-pending-badge');
+  if (!el) return;
+  const n = S.pending.length;
+  el.textContent = n;
+  el.classList.toggle('hidden', !n);
+}
+function togglePop(id, html) {
+  const pop = $(id), open = !pop.classList.contains('hidden');
+  closePops();
+  if (!open) { pop.innerHTML = html; mountIcons(pop); pop.classList.remove('hidden'); }
+}
+function bellHtml() {
+  const items = bellItems().slice(0, 8);
+  if (!items.length) return '<div class="pop-empty">You\'re all caught up.</div>';
+  return '<div class="pop-h">Due soon</div>' + items.map((t) =>
+    '<button class="pop-i" data-act="edit-task" data-id="' + esc(t._id) + '"><span style="flex:1;min-width:0"><b style="font-weight:500">' + esc(t.title) + '</b><small>' + (isOverdue(t) ? 'Overdue since ' : 'Due ') + fmtDay(dueKey(t)) + '</small></span><span class="chip ' + t.priority + '">' + t.priority + '</span></button>').join('');
+}
+function meHtml() {
+  return '<div style="padding:14px;border-bottom:1px solid var(--line)"><b>' + esc(S.user.name) + '</b><small style="display:block;color:var(--muted)">' + esc(S.user.email) + '</small></div>' +
+    (isAdmin() ? '<button class="pop-i" data-page="admin"><i class="ic" data-i="shield" data-s="16"></i>Admin Panel</button>' : '') +
+    '<button class="pop-i" data-page="settings"><i class="ic" data-i="settings" data-s="16"></i>Settings</button>' +
+    '<button class="pop-i" data-act="logout" style="color:var(--red)"><i class="ic" data-i="logout" data-s="16"></i>Log out</button>';
+}
+function gSearch(q) {
+  const pop = $('g-pop'); q = q.trim().toLowerCase();
+  if (!q) { pop.classList.add('hidden'); return; }
+  const tasks = S.tasks.filter((t) => matchTask(t, q)).slice(0, 5);
+  const people = S.team.filter((u) => (u.name + ' ' + u.email).toLowerCase().indexOf(q) > -1).slice(0, 4);
+  let html = '';
+  if (tasks.length) html += '<div class="pop-h">Tasks</div>' + tasks.map((t) => '<button class="pop-i" data-act="edit-task" data-id="' + esc(t._id) + '"><span><b style="font-weight:500">' + esc(t.title) + '</b><small>' + esc(t.category) + ' · ' + STATUS_LABEL[t.status] + '</small></span></button>').join('');
+  if (people.length) html += '<div class="pop-h">Members</div>' + people.map((u) => '<button class="pop-i" data-act="find-member" data-q="' + esc(u.email) + '">' + avatar(u, true) + '<span><b style="font-weight:500">' + esc(u.name) + '</b><small>' + esc(u.email) + '</small></span></button>').join('');
+  pop.innerHTML = html || '<div class="pop-empty">No results for “' + esc(q) + '”.</div>';
+  pop.classList.remove('hidden');
+}
+
+/* ───────── actions ───────── */
+async function setStatus(id, status) {
+  const t = S.tasks.find((x) => x._id === id);
+  if (!t || t.status === status) return;
+  try { await api('PATCH', '/tasks/' + id + '/status', { status }); toast('Moved to ' + STATUS_LABEL[status] + '.'); await refreshData(); } catch (e) { quiet(e); }
+}
+const ACT = {
+  'new-task': () => taskModal(null),
+  'new-user': () => userModal(null),
+  'edit-task': (b) => { const t = S.tasks.find((x) => x._id === b.dataset.id); if (t) taskModal(t); },
+  'delete-task': (b) => {
+    confirmModal('Delete Task', 'Are you sure you want to permanently delete this task?', 'Delete Task', true, async () => {
+      try { await api('DELETE', '/tasks/' + b.dataset.id); toast('Task deleted.'); await refreshData(); } catch (e) { quiet(e); }
+    });
+  },
+  'toggle-task': (b) => { const t = S.tasks.find((x) => x._id === b.dataset.id); if (t) setStatus(t._id, t.status === 'done' ? 'todo' : 'done'); },
+  'tk-status': (b) => { S.tf.status = b.dataset.v; renderTasks(); },
+  'view-list': () => { S.view = 'list'; renderTasks(); },
+  'view-kanban': () => { S.view = 'kanban'; renderTasks(); },
+  'clear-done': () => {
+    confirmModal('Clear Completed', 'Are you sure you want to remove all of your completed tasks?', 'Clear Tasks', true, async () => {
+      try { const r = await api('POST', '/tasks/clear-completed', {}); toast(r.removed + ' task(s) removed.'); await refreshData(); } catch (e) { quiet(e); }
+    });
+  },
+  'purge-workspace-done': () => {
+    confirmModal('Purge Workspace Tasks', 'Are you sure you want to permanently delete ALL completed tasks across the entire workspace? This cannot be undone.', 'Purge All Completed', true, async () => {
+      try { const r = await api('POST', '/admin/purge-completed', {}); toast(r.removed + ' workspace tasks removed.'); await refreshData(); } catch (e) { quiet(e); }
+    });
+  },
+  'export-backup': () => {
+    const data = JSON.stringify({ tasks: S.tasks, team: S.team, settings: S.settings, timestamp: new Date().toISOString() }, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'taskz-backup-' + todayKey() + '.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    toast('Workspace backup generated.');
+  },
+  'export-tasks': () => {
+    const rows = [['ID', 'Title', 'Description', 'Assignee', 'Category', 'Priority', 'Status', 'Due date', 'Created']];
+    visibleOrAll().forEach((t) => rows.push([t._id, t.title, t.description, t.ownerName, t.category, t.priority, STATUS_LABEL[t.status], dueKey(t), t.createdAt]));
+    download('tasks-' + todayKey() + '.csv', rows); toast('Tasks exported.');
+  },
+  'export-team': () => {
+    const rows = [['ID', 'Name', 'Email', 'Department', 'Role', 'Status', 'Tasks', 'Done', 'Joined']];
+    teamRows().forEach((u) => rows.push([u._id, u.name, u.email, (u.department||'General'), u.role, u.active ? 'Active' : 'Disabled', (u.stats?u.stats.total:0), (u.stats?u.stats.done:0), u.createdAt]));
+    download('team-' + todayKey() + '.csv', rows); toast('Team exported.');
+  },
+  'cal-prev': () => { S.cal = new Date(S.cal.getFullYear(), S.cal.getMonth() - 1, 1); renderCalendar(); },
+  'cal-next': () => { S.cal = new Date(S.cal.getFullYear(), S.cal.getMonth() + 1, 1); renderCalendar(); },
+  'cal-today': () => { S.cal = new Date(); renderCalendar(); },
+  'cal-day': (b) => taskModal(null, b.dataset.k),
+  'goto-team': () => go('team'),
+  'find-member': (b) => { S.tm.search = b.dataset.q; $('g-input').value = ''; go('team'); },
+  'help': helpModal,
+  'close-modal': closeModal,
+  'logout': () => logout(false),
+  'edit-user': (b) => { const u = S.team.find((x) => x._id === b.dataset.id); if (u) userModal(u); },
+  'reset-user': (b) => { const u = S.team.find((x) => x._id === b.dataset.id); if (u) resetModal(u); },
+  'toggle-user': (b) => {
+    const u = S.team.find((x) => x._id === b.dataset.id); if (!u) return;
+    const doToggle = async () => {
+      try { await api('PATCH', '/admin/users/' + u._id, { active: !u.active }); toast(u.active ? 'Access disabled.' : 'Access restored.'); await refreshData(); } catch (e) { quiet(e); }
+    };
+    if (u.active) {
+      confirmModal('Disable Access', 'Disable access for ' + esc(u.name) + '? They will be signed out and unable to log in.', 'Disable Member', true, doToggle);
+    } else { doToggle(); }
+  },
+  'delete-user-modal': (b) => {
+    const u = S.team.find((x) => x._id === b.dataset.id); if (u) promptDeleteUser(u);
+  },
+  'approve-user': async (b) => {
+    try { await api('POST', '/admin/users/' + b.dataset.id + '/approve', {}); toast('Account approved.'); await refreshData(); } catch (e) { quiet(e); }
+  },
+  'reject-user': (b) => {
+    const p = S.pending.find((x) => x._id === b.dataset.id); if (!p) return;
+    confirmModal('Decline Request', 'Decline the account request from ' + esc(p.name) + ' (' + esc(p.email) + ')? Their sign-up will be removed.', 'Decline', true, async () => {
+      try { await api('POST', '/admin/users/' + p._id + '/reject', {}); toast('Request declined.'); await refreshData(); } catch (e) { quiet(e); }
+    });
+  },
+  'gen-pass': (b) => { $(b.dataset.target).value = genPass(); },
+  'copy': async (b) => {
+    try { await navigator.clipboard.writeText(b.dataset.text); toast('Copied to clipboard.'); } catch (e) { toast('Copy failed. Select the text manually.', 'error'); }
+  },
+  'toggle-theme': () => toggleTheme(),
+  'retry-load': () => { $('pg-' + S.page).innerHTML = loadingHtml; refreshData(); }
+};
+function visibleOrAll() { return S.page === 'tasks' ? visibleTasks() : dashRows(); }
+
+/* ───────── global wiring ───────── */
+function bindGlobal() {
+  document.addEventListener('click', (e) => {
+    const nav = e.target.closest('[data-page]');
+    if (nav) { go(nav.getAttribute('data-page')); return; }
+    const b = e.target.closest('[data-act]');
+    if (b && ACT[b.dataset.act]) {
+      const inPop = b.closest('.pop');
+      if (inPop) { closePops(); if ($('g-input')) $('g-input').blur(); }
+      ACT[b.dataset.act](b, e); return;
+    }
+    if (!e.target.closest('.rel')) closePops();
+  });
+  document.addEventListener('change', (e) => { if (e.target.matches('[data-scope]')) changeScope(e.target.value); });
+  $('overlay').addEventListener('mousedown', (e) => { if (e.target === $('overlay')) closeModal(); });
+  $('btn-logout').addEventListener('click', () => logout(false));
+  $('btn-menu').addEventListener('click', () => { $('side').classList.add('open'); $('backdrop').classList.add('on'); });
+  $('backdrop').addEventListener('click', closeSide);
+  $('btn-bell').addEventListener('click', () => togglePop('bell-pop', bellHtml()));
+  $('btn-me').addEventListener('click', () => togglePop('me-pop', meHtml()));
+  $('g-input').addEventListener('input', (e) => gSearch(e.target.value));
+  $('g-input').addEventListener('focus', (e) => gSearch(e.target.value));
+
+  // drag & drop on the board
+  let dragId = null;
+  document.addEventListener('dragstart', (e) => {
+    const c = e.target.closest && e.target.closest('.kcard'); if (!c) return;
+    dragId = c.dataset.id; c.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', dragId);
+  });
+  document.addEventListener('dragend', () => { dragId = null; document.querySelectorAll('.dragging,.col.over').forEach((el) => el.classList.remove('dragging', 'over')); });
+  document.addEventListener('dragover', (e) => { const col = e.target.closest && e.target.closest('.col'); if (col && dragId) { e.preventDefault(); col.classList.add('over'); } });
+  document.addEventListener('dragleave', (e) => { const col = e.target.closest && e.target.closest('.col'); if (col && !col.contains(e.relatedTarget)) col.classList.remove('over'); });
+  document.addEventListener('drop', (e) => {
+    const col = e.target.closest && e.target.closest('.col'); if (!col || !dragId) return;
+    e.preventDefault(); col.classList.remove('over');
+    const id = dragId; dragId = null; setStatus(id, col.dataset.status);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    const app = !$('frame').classList.contains('hidden');
+    // Add safety check: e.key might be undefined in some edge cases
+    if (!e.key) return; 
+
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k' && app) { e.preventDefault(); $('g-input').focus(); return; }
+    if (e.key === 'Escape') { closeModal(); closePops(); closeSide(); return; }
+    const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement && document.activeElement.tagName);
+    if (e.key.toLowerCase() === 'n' && app && !typing && $('overlay').classList.contains('hidden') && !e.ctrlKey && !e.metaKey && !e.altKey) { e.preventDefault(); taskModal(null); }
+  });
+}
+
+/* ───────── init ───────── */
+mountIcons();
+applyTheme(currentTheme());
+$('yr').textContent = new Date().getFullYear();
+bindAuth();
+bindGlobal();
+if (restoreSession()) enterApp(); else showAuth();
+})();
+</script>
+</body>
+</html>
