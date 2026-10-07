@@ -6,7 +6,7 @@ dashboard, list/kanban/calendar views, team workload, and analytics.
 **Stack:** vanilla HTML/CSS/JS frontend (single file, no build step) +
 Node.js/Express backend + MongoDB, connected by a JWT-based API.
 
----
+---  
 
 ## Features
 
