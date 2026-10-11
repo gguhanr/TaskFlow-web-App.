@@ -9,7 +9,7 @@ Node.js/Express backend + MongoDB, connected by a JWT-based API.
 ---  
 
 ## Features
-
+   
 - Dashboard, list, kanban, and calendar views of your tasks
 - Team directory with per-person task stats
 - Analytics: completion rate, month-over-month trends, priority/category
